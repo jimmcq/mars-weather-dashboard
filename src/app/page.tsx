@@ -1,103 +1,115 @@
-import Image from "next/image";
+import { MartianClock } from '@/features/mars-time';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-red-950">
+      {/* Background stars effect */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-900/20 via-slate-900/50 to-slate-950"></div>
+      
+      <div className="relative z-10 container mx-auto px-4 py-8">
+        {/* Header */}
+        <header className="text-center mb-12">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+            Mars Weather Dashboard
+          </h1>
+          <p className="text-lg md:text-xl text-slate-300 mb-2">
+            Real-time Martian time and planetary data
+          </p>
+          <div className="text-sm text-slate-400">
+            🚀 Live data from NASA missions • Updated every second
+          </div>
+        </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        {/* Main content grid */}
+        <div className="grid gap-8 lg:grid-cols-3">
+          {/* Mars Clock - Featured */}
+          <div className="lg:col-span-1">
+            <MartianClock />
+          </div>
+
+          {/* Coming soon sections */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-slate-800/30 backdrop-blur border border-slate-700 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-3">
+                🌡️ Weather Data
+              </h2>
+              <p className="text-slate-400 mb-4">
+                Real-time temperature, pressure, and atmospheric conditions from NASA rovers.
+              </p>
+              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                Coming Soon
+              </div>
+            </div>
+
+            <div className="bg-slate-800/30 backdrop-blur border border-slate-700 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-3">
+                📊 Historical Trends
+              </h2>
+              <p className="text-slate-400 mb-4">
+                Interactive charts showing weather patterns and seasonal changes on Mars.
+              </p>
+              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                Coming Soon
+              </div>
+            </div>
+
+            <div className="bg-slate-800/30 backdrop-blur border border-slate-700 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-3">
+                📸 Latest Images
+              </h2>
+              <p className="text-slate-400 mb-4">
+                Recent photos from Curiosity and Perseverance rovers on the Martian surface.
+              </p>
+              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                Coming Soon
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Technical note */}
+        <div className="mt-12 text-center">
+          <div className="inline-block bg-slate-800/50 backdrop-blur border border-slate-600 rounded-lg px-6 py-4">
+            <p className="text-sm text-slate-400">
+              <span className="font-semibold text-slate-300">Technical Demo:</span>{' '}
+              Mars time calculations use the NASA Mars24 algorithm with real-time updates.
+              <br />
+              All time conversions are computed with astronomical precision.
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <footer className="mt-16 pt-8 border-t border-slate-700">
+          <div className="text-center">
+            <p className="text-sm text-slate-400 mb-4">
+              Built with ❤️ by{' '}
+              <span className="font-semibold text-slate-300">Jim McQuillan</span>
+            </p>
+            <div className="flex justify-center space-x-6 text-sm">
+              <a 
+                href="https://github.com/jimmcq" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-400 hover:text-white transition-colors duration-200"
+              >
+                GitHub
+              </a>
+              <a 
+                href="https://linkedin.com/in/jimmcquillan/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-slate-400 hover:text-white transition-colors duration-200"
+              >
+                LinkedIn
+              </a>
+            </div>
+            <p className="text-xs text-slate-500 mt-4">
+              © 2025 Jim McQuillan. Open source under MIT License.
+            </p>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
