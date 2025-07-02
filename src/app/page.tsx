@@ -24,11 +24,13 @@ export default function HomePage() {
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Mars Clock - Featured */}
           <div className="lg:col-span-1">
-            <MartianClock />
+            <section aria-label="Real-time Martian clock">
+              <MartianClock />
+            </section>
           </div>
 
           {/* Coming soon sections */}
-          <div className="lg:col-span-2 space-y-6">
+          <section className="lg:col-span-2 space-y-6" aria-label="Future features">
             <div className="bg-slate-800/30 backdrop-blur border border-slate-700 rounded-lg p-6">
               <h2 className="text-xl font-semibold text-white mb-3">
                 🌡️ Weather Data
@@ -64,7 +66,7 @@ export default function HomePage() {
                 Coming Soon
               </div>
             </div>
-          </div>
+          </section>
         </div>
 
         {/* Technical note */}

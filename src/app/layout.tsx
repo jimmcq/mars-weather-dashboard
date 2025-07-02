@@ -14,7 +14,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Mars Weather Dashboard",
-  description: "Real-time Martian time and planetary data",
+  description: "Real-time Martian time and planetary data using NASA's Mars24 algorithm",
+  keywords: "mars, weather, nasa, space, planetary science, real-time dashboard",
+  authors: [{ name: "Jim McQuillan", url: "https://github.com/jimmcq" }],
+  viewport: "width=device-width, initial-scale=1",
 };
 
 export default function RootLayout({
