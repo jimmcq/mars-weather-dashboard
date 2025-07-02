@@ -60,6 +60,7 @@
     "jest": "^30.0.3",
     "jest-environment-jsdom": "^30.0.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wait-on": "^8.0.3"
   }
 }
