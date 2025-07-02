@@ -2,7 +2,7 @@
 
 > A production-quality web application showcasing real-time Martian weather data and planetary time calculations
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](#) 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://mars-weather-dashboard-one.vercel.app/) 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript)](https://typescriptlang.org)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-blue?logo=tailwindcss)](https://tailwindcss.com)
