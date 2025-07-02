@@ -9,7 +9,7 @@ import { useMartianTime } from './useMartianTime';
 import { Clock, MapPin, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export function MartianClock() {
+export function MartianClock(): React.ReactElement {
   const marsTime = useMartianTime();
 
   if (!marsTime) {
