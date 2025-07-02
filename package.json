@@ -3,7 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "description": "🚀 Real-time Mars weather dashboard with planetary time calculations using NASA's Mars24 algorithm. Built with Next.js 15, TypeScript, and Tailwind CSS.",
-  "keywords": ["mars", "weather", "nasa", "space", "planetary-science", "nextjs", "typescript", "real-time", "dashboard", "portfolio"],
+  "keywords": [
+    "mars",
+    "weather",
+    "nasa",
+    "space",
+    "planetary-science",
+    "nextjs",
+    "typescript",
+    "real-time",
+    "dashboard",
+    "portfolio"
+  ],
   "author": {
     "name": "Jim McQuillan",
     "email": "jim@jimmcq.com",
@@ -40,6 +51,7 @@
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
