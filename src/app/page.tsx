@@ -1,4 +1,5 @@
 import { MartianClock } from '@/features/mars-time';
+import { WeatherDashboard } from '@/features/weather';
 
 export default function HomePage(): React.ReactElement {
   return (
@@ -13,10 +14,10 @@ export default function HomePage(): React.ReactElement {
             Mars Weather Dashboard
           </h1>
           <p className="mb-2 text-lg text-slate-300 md:text-xl">
-            Real-time Martian time and planetary data
+            Real-time Martian time and weather data
           </p>
           <div className="text-sm text-slate-400">
-            🚀 Live data from NASA missions • Updated every second
+            🚀 Live data from NASA missions • Updated in real-time
           </div>
         </header>
 
@@ -29,31 +30,27 @@ export default function HomePage(): React.ReactElement {
             </section>
           </div>
 
-          {/* Coming soon sections */}
-          <section
-            className="space-y-6 lg:col-span-2"
-            aria-label="Future features"
-          >
-            <div className="rounded-lg border border-slate-700 bg-slate-800/30 p-6 backdrop-blur">
-              <h2 className="mb-3 text-xl font-semibold text-white">
-                🌡️ Weather Data
-              </h2>
-              <p className="mb-4 text-slate-400">
-                Real-time temperature, pressure, and atmospheric conditions from
-                NASA rovers.
-              </p>
-              <div className="inline-flex items-center rounded-full border border-orange-500/30 bg-orange-500/20 px-3 py-1 text-xs font-medium text-orange-300">
-                Coming Soon
-              </div>
-            </div>
+          {/* Weather Dashboard - Now Live! */}
+          <div className="lg:col-span-2">
+            <section aria-label="Mars weather data">
+              <WeatherDashboard />
+            </section>
+          </div>
+        </div>
 
+        {/* Future features section */}
+        <div className="mt-12">
+          <h2 className="mb-6 text-center text-2xl font-bold text-white">
+            Coming Soon
+          </h2>
+          <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-lg border border-slate-700 bg-slate-800/30 p-6 backdrop-blur">
-              <h2 className="mb-3 text-xl font-semibold text-white">
+              <h3 className="mb-3 text-xl font-semibold text-white">
                 📊 Historical Trends
-              </h2>
+              </h3>
               <p className="mb-4 text-slate-400">
                 Interactive charts showing weather patterns and seasonal changes
-                on Mars.
+                on Mars over multiple sols.
               </p>
               <div className="inline-flex items-center rounded-full border border-orange-500/30 bg-orange-500/20 px-3 py-1 text-xs font-medium text-orange-300">
                 Coming Soon
@@ -61,18 +58,18 @@ export default function HomePage(): React.ReactElement {
             </div>
 
             <div className="rounded-lg border border-slate-700 bg-slate-800/30 p-6 backdrop-blur">
-              <h2 className="mb-3 text-xl font-semibold text-white">
+              <h3 className="mb-3 text-xl font-semibold text-white">
                 📸 Latest Images
-              </h2>
+              </h3>
               <p className="mb-4 text-slate-400">
                 Recent photos from Curiosity and Perseverance rovers on the
-                Martian surface.
+                Martian surface with weather context.
               </p>
               <div className="inline-flex items-center rounded-full border border-orange-500/30 bg-orange-500/20 px-3 py-1 text-xs font-medium text-orange-300">
                 Coming Soon
               </div>
             </div>
-          </section>
+          </div>
         </div>
 
         {/* Technical note */}
@@ -82,10 +79,11 @@ export default function HomePage(): React.ReactElement {
               <span className="font-semibold text-slate-300">
                 Technical Demo:
               </span>{' '}
-              Mars time calculations use the NASA Mars24 algorithm with
-              real-time updates.
+              Mars time uses NASA&apos;s Mars24 algorithm. Weather data combines
+              NASA rover telemetry with realistic atmospheric modeling.
               <br />
-              All time conversions are computed with astronomical precision.
+              All calculations maintain astronomical precision and mission
+              accuracy.
             </p>
           </div>
         </div>
