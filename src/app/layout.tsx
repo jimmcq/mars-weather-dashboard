@@ -19,6 +19,48 @@ export const metadata: Metadata = {
   keywords:
     'mars, weather, nasa, space, planetary science, real-time dashboard',
   authors: [{ name: 'Jim McQuillan', url: 'https://github.com/jimmcq' }],
+  openGraph: {
+    title: 'Mars Weather Dashboard',
+    description:
+      "Real-time Martian time and planetary data using NASA's Mars24 algorithm",
+    url: 'https://mars-weather-dashboard.vercel.app',
+    siteName: 'Mars Weather Dashboard',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Mars Weather Dashboard - Real-time Martian time and weather data',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Mars Weather Dashboard',
+    description:
+      "Real-time Martian time and planetary data using NASA's Mars24 algorithm",
+    images: ['/og-image.png'],
+    creator: '@jimmcq',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
+  manifest: '/site.webmanifest',
 };
 
 export const viewport: Viewport = {
