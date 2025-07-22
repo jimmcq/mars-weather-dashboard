@@ -18,22 +18,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
+          cache: 'yarn'
       
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
       
       - name: Type check
-        run: npm run type-check
+        run: yarn type-check
       
       - name: Lint
-        run: npm run lint
+        run: yarn lint
       
       - name: Run tests
-        run: npm run test:ci
+        run: yarn test:ci
       
       - name: Build
-        run: npm run build
+        run: yarn build
       
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
@@ -55,10 +55,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
+          cache: 'yarn'
       
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
       
       - name: Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
