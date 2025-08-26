@@ -2,6 +2,7 @@
 
 > A production-quality web application showcasing real-time Martian weather data and planetary time calculations
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/jimmcq/mars-weather-dashboard)
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://mars-weather-dashboard-one.vercel.app/) 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript)](https://typescriptlang.org)
