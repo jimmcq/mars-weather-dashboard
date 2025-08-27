@@ -48,80 +48,86 @@ jest.mock('recharts', () => ({
 // Mock useWeatherData hook
 jest.mock('@/features/weather/useWeatherData');
 
+// Sample weather sol data
+const mockWeatherSol1 = {
+  sol: 3800,
+  earthDate: '2023-01-01',
+  temperature: {
+    min: -80.5,
+    max: -10.2,
+    average: -45.3,
+    unit: 'celsius' as const,
+    quality: 'complete' as const,
+  },
+  atmosphere: {
+    pressure: 75000,
+    unit: 'pa' as const,
+    quality: 'complete' as const,
+  },
+  wind: {
+    speed: 12.5,
+    direction: 180,
+    unit: 'mps' as const,
+    quality: 'complete' as const,
+  },
+  rover: 'curiosity' as const,
+  instrument: 'REMS' as const,
+  dataQuality: 'complete' as const,
+  location: {
+    latitude: -4.5,
+    longitude: 137.4,
+    landingDate: '2012-08-06',
+    locationName: 'Gale Crater',
+  },
+  lastUpdated: '2023-01-01T12:00:00Z',
+};
+
+const mockWeatherSol2 = {
+  sol: 3801,
+  earthDate: '2023-01-02',
+  temperature: {
+    min: -82.1,
+    max: -8.7,
+    average: -43.9,
+    unit: 'celsius' as const,
+    quality: 'complete' as const,
+  },
+  atmosphere: {
+    pressure: 76000,
+    unit: 'pa' as const,
+    quality: 'complete' as const,
+  },
+  wind: {
+    speed: 15.2,
+    direction: 200,
+    unit: 'mps' as const,
+    quality: 'complete' as const,
+  },
+  rover: 'curiosity' as const,
+  instrument: 'REMS' as const,
+  dataQuality: 'complete' as const,
+  location: {
+    latitude: -4.5,
+    longitude: 137.4,
+    landingDate: '2012-08-06',
+    locationName: 'Gale Crater',
+  },
+  lastUpdated: '2023-01-02T12:00:00Z',
+};
+
 // Default mock data
 const defaultMockData = {
   data: {
-    history: [
-      {
-        sol: 3800,
-        earthDate: '2023-01-01',
-        temperature: {
-          min: -80.5,
-          max: -10.2,
-          average: -45.3,
-          unit: 'celsius',
-          quality: 'complete',
-        },
-        atmosphere: {
-          pressure: 75000,
-          unit: 'pa',
-          quality: 'complete',
-        },
-        wind: {
-          speed: 12.5,
-          direction: 180,
-          unit: 'mps',
-          quality: 'complete',
-        },
-        rover: 'curiosity',
-        instrument: 'REMS',
-        dataQuality: 'complete',
-        location: {
-          latitude: -4.5,
-          longitude: 137.4,
-          landingDate: '2012-08-06',
-          locationName: 'Gale Crater',
-        },
-        lastUpdated: '2023-01-01T12:00:00Z',
-      },
-      {
-        sol: 3801,
-        earthDate: '2023-01-02',
-        temperature: {
-          min: -82.1,
-          max: -8.7,
-          average: -43.9,
-          unit: 'celsius',
-          quality: 'complete',
-        },
-        atmosphere: {
-          pressure: 76000,
-          unit: 'pa',
-          quality: 'complete',
-        },
-        wind: {
-          speed: 15.2,
-          direction: 200,
-          unit: 'mps',
-          quality: 'complete',
-        },
-        rover: 'curiosity',
-        instrument: 'REMS',
-        dataQuality: 'complete',
-        location: {
-          latitude: -4.5,
-          longitude: 137.4,
-          landingDate: '2012-08-06',
-          locationName: 'Gale Crater',
-        },
-        lastUpdated: '2023-01-02T12:00:00Z',
-      },
-    ],
+    latest: mockWeatherSol2, // Use the most recent sol as latest
+    history: [mockWeatherSol1, mockWeatherSol2],
+    rover: 'curiosity' as const,
+    lastFetch: '2023-01-02T12:00:00Z',
+    status: 'success' as const,
   },
   isLoading: false,
   error: null,
   refetch: jest.fn(),
-  lastFetch: null,
+  lastFetch: '2023-01-02T12:00:00Z',
 };
 
 // Cast the mock
@@ -167,7 +173,13 @@ describe('HistoricalTrends', () => {
   it('shows no data state', () => {
     // Mock no data state for this specific test
     mockedUseWeatherData.mockReturnValueOnce({
-      data: { history: [] },
+      data: {
+        latest: mockWeatherSol1, // Still need a latest for structure
+        history: [], // Empty history for no data state
+        rover: 'curiosity' as const,
+        lastFetch: '2023-01-02T12:00:00Z',
+        status: 'success' as const,
+      },
       isLoading: false,
       error: null,
       refetch: jest.fn(),
