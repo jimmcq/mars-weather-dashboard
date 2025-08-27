@@ -89,7 +89,7 @@ describe('LatestImages', () => {
       isLoading: true,
       error: null,
       refetch: jest.fn(),
-    } as ReturnType<typeof usePhotosData>);
+    } as unknown as ReturnType<typeof usePhotosData>);
 
     renderComponent(<LatestImages />);
 
@@ -113,7 +113,7 @@ describe('LatestImages', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
-    } as ReturnType<typeof usePhotosData>);
+    } as unknown as ReturnType<typeof usePhotosData>);
 
     renderComponent(<LatestImages />);
 
@@ -141,7 +141,7 @@ describe('LatestImages', () => {
       isLoading: false,
       error,
       refetch: mockRefetch,
-    } as ReturnType<typeof usePhotosData>);
+    } as unknown as ReturnType<typeof usePhotosData>);
 
     renderComponent(<LatestImages />);
 
@@ -172,7 +172,7 @@ describe('LatestImages', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
-    } as ReturnType<typeof usePhotosData>);
+    } as unknown as ReturnType<typeof usePhotosData>);
 
     renderComponent(<LatestImages />);
 
@@ -199,7 +199,7 @@ describe('LatestImages', () => {
       isLoading: false,
       error: null,
       refetch: mockRefetch,
-    } as ReturnType<typeof usePhotosData>);
+    } as unknown as ReturnType<typeof usePhotosData>);
 
     renderComponent(<LatestImages showRoverSelector={true} />);
 
@@ -242,7 +242,7 @@ describe('LatestImages', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
-    } as ReturnType<typeof usePhotosData>);
+    } as unknown as ReturnType<typeof usePhotosData>);
 
     renderComponent(<LatestImages showCameraFilter={true} />);
 
@@ -271,7 +271,7 @@ describe('LatestImages', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
-    } as ReturnType<typeof usePhotosData>);
+    } as unknown as ReturnType<typeof usePhotosData>);
 
     renderComponent(<LatestImages />);
 
@@ -318,7 +318,7 @@ describe('LatestImages', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
-    } as ReturnType<typeof usePhotosData>);
+    } as unknown as ReturnType<typeof usePhotosData>);
 
     renderComponent(<LatestImages limit={5} />);
 

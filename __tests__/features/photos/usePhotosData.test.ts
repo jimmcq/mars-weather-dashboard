@@ -55,9 +55,12 @@ async function fetchPhotosData(
   const params = new URLSearchParams();
 
   if (options.limit) params.append('limit', options.limit.toString());
-  if (options.sol !== undefined) params.append('sol', options.sol.toString());
-  if (options.earthDate) params.append('earth_date', options.earthDate);
-  if (options.camera) params.append('camera', options.camera);
+  if (options.sol !== undefined && options.sol !== null)
+    params.append('sol', options.sol.toString());
+  if (options.earthDate && typeof options.earthDate === 'string')
+    params.append('earth_date', options.earthDate);
+  if (options.camera && typeof options.camera === 'string')
+    params.append('camera', options.camera);
   if (options.page) params.append('page', options.page.toString());
 
   const url = `/api/photos/${rover}${params.toString() ? `?${params.toString()}` : ''}`;
