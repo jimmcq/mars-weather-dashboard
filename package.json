@@ -50,6 +50,7 @@
     ]
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.85.5",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.542.0",

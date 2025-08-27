@@ -2,6 +2,7 @@
 
 import { MartianClock } from '@/features/mars-time';
 import { WeatherDashboard, HistoricalTrends } from '@/features/weather';
+import { LatestImages } from '@/features/photos';
 
 export default function HomePage(): React.ReactElement {
   return (
@@ -47,24 +48,15 @@ export default function HomePage(): React.ReactElement {
           </div>
         </div>
 
-        {/* Future features section */}
+        {/* Latest Images Section */}
         <div className="mt-12">
-          <h2 className="mb-6 text-center text-2xl font-bold text-white">
-            Coming Soon
-          </h2>
-          <div className="grid gap-6 md:grid-cols-1">
-            <div className="rounded-lg border border-slate-700 bg-slate-800/30 p-6 backdrop-blur">
-              <h3 className="mb-3 text-xl font-semibold text-white">
-                📸 Latest Images
-              </h3>
-              <p className="mb-4 text-slate-400">
-                Recent photos from Curiosity and Perseverance rovers on the
-                Martian surface with weather context.
-              </p>
-              <div className="inline-flex items-center rounded-full border border-orange-500/30 bg-orange-500/20 px-3 py-1 text-xs font-medium text-orange-300">
-                Coming Soon
-              </div>
-            </div>
+          <div className="rounded-lg border border-slate-700 bg-slate-800/30 p-6 backdrop-blur">
+            <LatestImages
+              initialRover="curiosity"
+              limit={8}
+              showRoverSelector={true}
+              showCameraFilter={true}
+            />
           </div>
         </div>
 
