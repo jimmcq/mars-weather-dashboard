@@ -1,5 +1,7 @@
+'use client';
+
 import { MartianClock } from '@/features/mars-time';
-import { WeatherDashboard } from '@/features/weather';
+import { WeatherDashboard, HistoricalTrends } from '@/features/weather';
 
 export default function HomePage(): React.ReactElement {
   return (
@@ -38,25 +40,19 @@ export default function HomePage(): React.ReactElement {
           </div>
         </div>
 
+        {/* Historical Trends Section */}
+        <div className="mt-12">
+          <div className="mb-6">
+            <HistoricalTrends initialRover="curiosity" />
+          </div>
+        </div>
+
         {/* Future features section */}
         <div className="mt-12">
           <h2 className="mb-6 text-center text-2xl font-bold text-white">
             Coming Soon
           </h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="rounded-lg border border-slate-700 bg-slate-800/30 p-6 backdrop-blur">
-              <h3 className="mb-3 text-xl font-semibold text-white">
-                📊 Historical Trends
-              </h3>
-              <p className="mb-4 text-slate-400">
-                Interactive charts showing weather patterns and seasonal changes
-                on Mars over multiple sols.
-              </p>
-              <div className="inline-flex items-center rounded-full border border-orange-500/30 bg-orange-500/20 px-3 py-1 text-xs font-medium text-orange-300">
-                Coming Soon
-              </div>
-            </div>
-
+          <div className="grid gap-6 md:grid-cols-1">
             <div className="rounded-lg border border-slate-700 bg-slate-800/30 p-6 backdrop-blur">
               <h3 className="mb-3 text-xl font-semibold text-white">
                 📸 Latest Images

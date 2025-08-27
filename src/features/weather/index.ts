@@ -6,6 +6,8 @@
 // Main components
 export { WeatherDashboard } from './WeatherDashboard';
 export type { WeatherDashboardProps } from './WeatherDashboard';
+export { HistoricalTrends } from './HistoricalTrends';
+export type { HistoricalTrendsProps } from './HistoricalTrends';
 
 // Hooks
 export { useWeatherData } from './useWeatherData';
