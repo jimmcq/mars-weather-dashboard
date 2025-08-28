@@ -31,8 +31,8 @@ class MockResponse {
 }
 
 // Assign to global for tests
-(global as typeof global & { Response: typeof MockResponse }).Response =
-  MockResponse;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(global as any).Response = MockResponse;
 
 describe('ApiResilience', () => {
   beforeEach(() => {

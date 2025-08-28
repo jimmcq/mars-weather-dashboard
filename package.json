@@ -44,8 +44,8 @@
     "*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write",
-      "yarn type-check",
-      "yarn test:ci --bail --passWithNoTests"
+      "bash -c 'yarn type-check'",
+      "bash -c 'yarn test:ci --bail --passWithNoTests'"
     ],
     "*.{json,md,css}": [
       "prettier --write"
