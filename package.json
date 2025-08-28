@@ -32,6 +32,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "start:lighthouse": "node scripts/start-for-lighthouse.js",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "test": "jest",
