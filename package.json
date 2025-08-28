@@ -40,7 +40,7 @@
     "test:ci": "NODE_OPTIONS='--no-deprecation' NODE_ENV=test jest --ci --coverage --watchAll=false",
     "test:verbose": "NODE_OPTIONS='--no-deprecation' NODE_ENV=test jest",
     "type-check": "tsc --noEmit",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
