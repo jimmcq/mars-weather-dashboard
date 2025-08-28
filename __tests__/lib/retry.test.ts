@@ -85,6 +85,7 @@ describe('ApiResilience', () => {
         ApiResilience.withRetry(mockFn, {
           maxAttempts: 2,
           initialDelayMs: 1,
+          shouldRetry: () => true, // Ensure it retries
         })
       ).rejects.toThrow('Persistent error');
 
