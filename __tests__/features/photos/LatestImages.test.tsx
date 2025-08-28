@@ -12,7 +12,10 @@ import { LatestPhotosData, MarsPhoto } from '@/types/photos';
 jest.mock('@/features/photos/usePhotosData');
 const mockUsePhotosData = jest.mocked(usePhotosData);
 
-// Note: useCameraData hook is no longer used - cameras come from photo data
+// Mock the useCameraData hook
+jest.mock('@/features/photos/useCameraData');
+import { useCameraData } from '@/features/photos/useCameraData';
+const mockUseCameraData = jest.mocked(useCameraData);
 
 // Mock framer-motion to avoid animation issues in tests
 jest.mock('framer-motion', () => ({
@@ -83,6 +86,35 @@ const renderComponent = (component: React.ReactElement): void => {
 describe('LatestImages', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // Mock all available cameras (including some without photos)
+    mockUseCameraData.mockReturnValue({
+      data: [
+        {
+          id: 1,
+          name: 'FHAZ',
+          fullName: 'Front Hazard Avoidance Camera',
+          roverId: 5,
+        },
+        {
+          id: 2,
+          name: 'RHAZ',
+          fullName: 'Rear Hazard Avoidance Camera',
+          roverId: 5,
+        },
+        { id: 3, name: 'MAST', fullName: 'Mast Camera', roverId: 5 },
+        { id: 4, name: 'NAVCAM', fullName: 'Navigation Camera', roverId: 5 },
+        {
+          id: 5,
+          name: 'CHEMCAM_RMI',
+          fullName: 'ChemCam Remote Micro-Imager',
+          roverId: 5,
+        },
+        { id: 6, name: 'MAHLI', fullName: 'Mars Hand Lens Imager', roverId: 5 },
+      ],
+      isLoading: false,
+      error: null,
+    } as unknown as ReturnType<typeof useCameraData>);
   });
 
   it('renders loading state correctly', () => {
@@ -252,10 +284,18 @@ describe('LatestImages', () => {
       const cameraSelect = screen.getByDisplayValue('All Cameras');
       expect(cameraSelect).toBeInTheDocument();
 
-      // Check that camera options are present (from mock photos)
-      expect(screen.getByText(/MAST - Mast Camera/)).toBeInTheDocument();
+      // Check that camera options are present
+      // MAST and NAVCAM should be enabled (have photos)
+      expect(screen.getByText(/MAST - Mast Camera$/)).toBeInTheDocument();
       expect(
-        screen.getByText(/NAVCAM - Navigation Camera/)
+        screen.getByText(/NAVCAM - Navigation Camera$/)
+      ).toBeInTheDocument();
+
+      // CHEMCAM_RMI should be disabled (no photos)
+      expect(
+        screen.getByText(
+          /CHEMCAM_RMI - ChemCam Remote Micro-Imager \(No recent photos\)/
+        )
       ).toBeInTheDocument();
     });
   });

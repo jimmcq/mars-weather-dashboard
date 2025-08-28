@@ -300,10 +300,22 @@ export class PhotosService {
 
       const response = await this.fetchWithRetry(url, {
         timeout: 15000,
-        retries: 2,
+        retries: 0, // Don't retry manifest requests to avoid more rate limiting
       });
 
       if (!response.ok) {
+        // For rate limiting (429) or other API issues, fall back to predefined cameras
+        if (response.status === 429) {
+          console.warn(
+            `NASA API rate limited (429). Using fallback cameras for ${rover}`
+          );
+          return {
+            cameras: this.getFallbackCameras(rover),
+            maxSol: 0,
+            status: 'active',
+          };
+        }
+
         throw new Error(
           `NASA Manifest API responded with ${response.status}: ${response.statusText}`
         );
@@ -334,13 +346,20 @@ export class PhotosService {
         status: manifest.status,
       };
     } catch (error) {
-      console.error(`Error fetching manifest for ${rover}:`, error);
+      // Check if it's a rate limiting error
+      if (error instanceof Error && error.message.includes('429')) {
+        console.warn(
+          `NASA API rate limited for ${rover}. Using fallback cameras.`
+        );
+      } else {
+        console.error(`Error fetching manifest for ${rover}:`, error);
+      }
 
       // Return fallback cameras if API fails
       return {
         cameras: this.getFallbackCameras(rover),
         maxSol: 0,
-        status: 'unknown',
+        status: 'active', // Assume active when using fallbacks
       };
     }
   }
@@ -353,7 +372,7 @@ export class PhotosService {
       FHAZ: 'Front Hazard Avoidance Camera',
       RHAZ: 'Rear Hazard Avoidance Camera',
       MAST: 'Mast Camera',
-      CHEMCAM: 'Chemistry and Camera Complex',
+      CHEMCAM_RMI: 'ChemCam Remote Micro-Imager',
       MAHLI: 'Mars Hand Lens Imager',
       MARDI: 'Mars Descent Imager',
       NAVCAM: 'Navigation Camera',
@@ -404,8 +423,8 @@ export class PhotosService {
       },
       {
         id: 4,
-        name: 'CHEMCAM' as CameraName,
-        fullName: 'Chemistry and Camera Complex',
+        name: 'CHEMCAM_RMI' as CameraName,
+        fullName: 'ChemCam Remote Micro-Imager',
         roverId: 5,
       },
       {
@@ -443,18 +462,42 @@ export class PhotosService {
       },
       {
         id: 3,
-        name: 'NAVCAM' as CameraName,
-        fullName: 'Navigation Camera',
+        name: 'NAVCAM_LEFT' as CameraName,
+        fullName: 'Navigation Camera - Left',
         roverId: 8,
       },
       {
         id: 4,
+        name: 'NAVCAM_RIGHT' as CameraName,
+        fullName: 'Navigation Camera - Right',
+        roverId: 8,
+      },
+      {
+        id: 5,
+        name: 'MCZCAM' as CameraName,
+        fullName: 'Mast Camera Zoom',
+        roverId: 8,
+      },
+      {
+        id: 6,
+        name: 'MCZCAM_LEFT' as CameraName,
+        fullName: 'Mast Camera Zoom - Left',
+        roverId: 8,
+      },
+      {
+        id: 7,
+        name: 'MCZCAM_RIGHT' as CameraName,
+        fullName: 'Mast Camera Zoom - Right',
+        roverId: 8,
+      },
+      {
+        id: 8,
         name: 'SUPERCAM_RMI' as CameraName,
         fullName: 'SuperCam Remote Micro-Imager',
         roverId: 8,
       },
       {
-        id: 5,
+        id: 9,
         name: 'PIXL' as CameraName,
         fullName: 'Planetary Instrument for X-ray Lithochemistry',
         roverId: 8,

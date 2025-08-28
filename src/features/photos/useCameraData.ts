@@ -18,10 +18,17 @@ export function useCameraData(rover: RoverName): ReturnType<typeof useQuery> {
       const manifest = await PhotosService.getRoverManifest(rover);
       return manifest.cameras;
     },
-    staleTime: 1000 * 60 * 60 * 24, // 24 hours - camera data rarely changes
-    gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
-    retry: 2,
+    staleTime: 1000 * 60 * 60 * 24 * 7, // 7 days - camera data very rarely changes
+    gcTime: 1000 * 60 * 60 * 24 * 14, // 14 days - keep in cache longer (within 32-bit limit)
+    retry: (failureCount, error) => {
+      // Don't retry on rate limiting, just use fallback
+      if (error instanceof Error && error.message.includes('429')) {
+        return false;
+      }
+      return failureCount < 1; // Only retry once for other errors
+    },
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }

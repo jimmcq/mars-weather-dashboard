@@ -18,11 +18,9 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { usePhotosData } from './usePhotosData';
+import { useCameraData } from './useCameraData';
 import { PhotosService } from './photos-service';
-import {
-  RoverName,
-  PhotoDisplayData,
-} from '@/types/photos';
+import { RoverName, PhotoDisplayData, CameraInfo } from '@/types/photos';
 
 interface LatestImagesProps {
   /** Initial rover to display */
@@ -171,28 +169,36 @@ export const LatestImages: React.FC<LatestImagesProps> = ({
     photosOptions
   );
 
-  // Get available cameras from current photos (only cameras with actual photos)
-  const availableCameras = useMemo(() => {
-    if (!data?.data.photos) return [];
-    const cameras = data.data.photos.map((photo) => photo.camera);
-    const unique = cameras.filter(
-      (camera, index, self) =>
-        index === self.findIndex((c) => c.name === camera.name)
-    );
-    return unique;
+  // Get all possible cameras for the rover from manifest
+  const { data: allCamerasData = [] } = useCameraData(selectedRover);
+
+  // Get cameras that actually have photos in current data
+  const camerasWithPhotos = useMemo(() => {
+    if (!data?.data.photos) return new Set<string>();
+    const cameraNames = data.data.photos.map((photo) => photo.camera.name);
+    return new Set(cameraNames);
   }, [data]);
+
+  // Combine all cameras with availability info
+  const cameraOptions = useMemo(() => {
+    const allCameras = (allCamerasData as CameraInfo[]) || [];
+    return allCameras.map((camera) => ({
+      ...camera,
+      hasPhotos: camerasWithPhotos.has(camera.name),
+    }));
+  }, [allCamerasData, camerasWithPhotos]);
 
   // Transform and filter photos for display
   const displayPhotos = useMemo(() => {
     if (!data?.data.photos) return [];
-    
+
     let photos = data.data.photos;
-    
+
     // Apply camera filter if selected
     if (selectedCamera) {
       photos = photos.filter((photo) => photo.camera.name === selectedCamera);
     }
-    
+
     return photos.map(PhotosService.transformForDisplay);
   }, [data, selectedCamera]);
 
@@ -280,16 +286,22 @@ export const LatestImages: React.FC<LatestImagesProps> = ({
           )}
 
           {/* Camera filter */}
-          {showCameraFilter && availableCameras.length > 0 && (
+          {showCameraFilter && cameraOptions.length > 0 && (
             <select
               value={selectedCamera}
               onChange={(e) => setSelectedCamera(e.target.value)}
               className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
             >
               <option value="">All Cameras</option>
-              {availableCameras.map((camera) => (
-                <option key={camera.name} value={camera.name}>
+              {cameraOptions.map((camera) => (
+                <option
+                  key={camera.name}
+                  value={camera.name}
+                  disabled={!camera.hasPhotos}
+                  className={camera.hasPhotos ? '' : 'text-gray-400'}
+                >
                   {camera.name} - {camera.fullName}
+                  {!camera.hasPhotos ? ' (No recent photos)' : ''}
                 </option>
               ))}
             </select>

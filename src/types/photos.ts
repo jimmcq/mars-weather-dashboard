@@ -11,7 +11,7 @@ export type CameraName =
   | 'FHAZ' // Front Hazard Avoidance Camera
   | 'RHAZ' // Rear Hazard Avoidance Camera
   | 'MAST' // Mast Camera
-  | 'CHEMCAM' // Chemistry and Camera Complex
+  | 'CHEMCAM_RMI' // ChemCam Remote Micro-Imager
   | 'MAHLI' // Mars Hand Lens Imager
   | 'MARDI' // Mars Descent Imager
   | 'NAVCAM' // Navigation Camera
