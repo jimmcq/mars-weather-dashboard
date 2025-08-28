@@ -7,6 +7,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import {
   Camera,
   Calendar,
@@ -98,15 +99,22 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
           </button>
 
           {/* Main image */}
-          <motion.img
+          <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            src={photo.imgSrc}
-            alt={photo.altText}
-            className="max-h-[80vh] max-w-full rounded-lg object-contain"
-            loading="eager"
-          />
+            className="relative max-h-[80vh] max-w-full overflow-hidden rounded-lg"
+            style={{ aspectRatio: '16/9' }}
+          >
+            <Image
+              src={photo.imgSrc}
+              alt={photo.altText}
+              fill
+              className="object-contain"
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
+            />
+          </motion.div>
 
           {/* Photo information */}
           <motion.div
@@ -349,12 +357,13 @@ export const LatestImages: React.FC<LatestImagesProps> = ({
                 className="group relative cursor-pointer overflow-hidden rounded-lg bg-gray-100 shadow-sm transition-all hover:shadow-lg"
                 onClick={() => handlePhotoClick(index)}
               >
-                <div className="aspect-square">
-                  <img
+                <div className="aspect-square relative overflow-hidden">
+                  <Image
                     src={photo.imgSrc}
                     alt={photo.altText}
-                    className="h-full w-full object-cover transition-transform group-hover:scale-105"
-                    loading="lazy"
+                    fill
+                    className="object-cover transition-transform group-hover:scale-105"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   />
                 </div>
 

@@ -8,6 +8,7 @@
 import { useState, useEffect } from 'react';
 import { MarsTimeCalculator } from './time-conversion';
 import { MarsTimeData, MarsTimeOptions } from '@/types/mars-time';
+import * as Sentry from '@sentry/react';
 
 /**
  * Custom hook for real-time Mars time calculations
@@ -31,9 +32,23 @@ export function useMartianTime(
 
   useEffect(() => {
     const updateMarsTime = (): void => {
-      const now = new Date();
-      const timeData = MarsTimeCalculator.calculateMarsTime(now);
-      setMarsTime(timeData);
+      try {
+        const now = new Date();
+        const timeData = MarsTimeCalculator.calculateMarsTime(now);
+        setMarsTime(timeData);
+      } catch (error) {
+        console.error('Error calculating Mars time:', error);
+        
+        // Report to Sentry
+        Sentry.withScope((scope) => {
+          scope.setTag('hook', 'useMartianTime');
+          scope.setContext('options', options);
+          scope.setLevel('error');
+          Sentry.captureException(error as Error);
+        });
+        
+        // Keep the previous time data on error
+      }
     };
 
     // Initial calculation
@@ -44,7 +59,7 @@ export function useMartianTime(
 
     // Cleanup on unmount
     return (): void => clearInterval(interval);
-  }, [updateInterval, includePrecision]);
+  }, [updateInterval, includePrecision, options]);
 
   return marsTime;
 }

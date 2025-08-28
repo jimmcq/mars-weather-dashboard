@@ -17,6 +17,7 @@ import {
 } from '@/types/weather';
 import { ROVER_LOCATIONS } from '@/lib/constants';
 import { ApiResilience } from '@/lib/retry';
+import * as Sentry from '@sentry/nextjs';
 
 /**
  * Weather Service Class
@@ -85,6 +86,15 @@ export class WeatherService {
       };
     } catch (error) {
       console.error(`Weather service error for ${rover}:`, error);
+
+      // Report to Sentry with context
+      Sentry.withScope((scope) => {
+        scope.setTag('service', 'WeatherService');
+        scope.setTag('rover', rover);
+        scope.setContext('options', options);
+        scope.setLevel('error');
+        Sentry.captureException(error as Error);
+      });
 
       // Ultimate fallback: generate mock data
       const fallbackData = this.generateMockWeatherData(rover, options);

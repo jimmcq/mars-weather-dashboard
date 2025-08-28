@@ -8,6 +8,7 @@
 import React, { Component, ReactNode, ErrorInfo } from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
+import * as Sentry from '@sentry/react';
 
 /**
  * Error boundary state interface
@@ -102,19 +103,35 @@ export class ErrorBoundary extends Component<
    * @param errorInfo - Additional error context
    */
   private reportError(error: Error, errorInfo: ErrorInfo): void {
-    // Implementation would depend on your error monitoring service
-    // Example for Sentry:
-    // Sentry.withScope((scope) => {
-    //   scope.setContext('errorInfo', errorInfo);
-    //   Sentry.captureException(error);
-    // });
-
-    // For now, just log to console in production
-    console.error('Reported error:', {
-      error: error.message,
-      stack: error.stack,
-      errorInfo,
+    // Report to Sentry with additional context
+    Sentry.withScope((scope) => {
+      // Add React component stack trace
+      scope.setContext('errorInfo', {
+        componentStack: errorInfo.componentStack,
+      });
+      
+      // Add error boundary context
+      scope.setTag('errorBoundary', 'ReactErrorBoundary');
+      scope.setLevel('error');
+      
+      // Add user context if available
+      scope.setContext('component', {
+        name: this.constructor.name,
+        props: Object.keys(this.props),
+      });
+      
+      // Capture the exception
+      Sentry.captureException(error);
     });
+
+    // Also log to console in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Reported error to Sentry:', {
+        error: error.message,
+        stack: error.stack,
+        errorInfo,
+      });
+    }
   }
 
   /**
