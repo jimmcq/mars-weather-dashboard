@@ -35,8 +35,10 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "test:ci": "jest --ci --coverage --watchAll=false",
+    "test:clean": "NODE_ENV=test jest --silent 2>/dev/null || NODE_ENV=test jest --silent",
+    "test:watch": "NODE_OPTIONS='--no-deprecation' NODE_ENV=test jest --watch",
+    "test:ci": "NODE_OPTIONS='--no-deprecation' NODE_ENV=test jest --ci --coverage --watchAll=false",
+    "test:verbose": "NODE_OPTIONS='--no-deprecation' NODE_ENV=test jest",
     "type-check": "tsc --noEmit",
     "prepare": "husky"
   },

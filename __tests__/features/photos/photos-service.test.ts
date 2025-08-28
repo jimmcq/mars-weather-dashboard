@@ -13,6 +13,17 @@ const mockFetch = jest.mocked(fetch);
 const originalEnv = process.env;
 
 describe('PhotosService', () => {
+  // Mock console.error to suppress expected error logs during error testing
+  const originalConsoleError = console.error;
+
+  beforeAll(() => {
+    console.error = jest.fn();
+  });
+
+  afterAll(() => {
+    console.error = originalConsoleError;
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
     process.env = { ...originalEnv, NASA_API_KEY: 'test-api-key' };
