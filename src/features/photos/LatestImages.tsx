@@ -18,12 +18,14 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { usePhotosData } from './usePhotosData';
+import { useCameraData } from './useCameraData';
 import { PhotosService } from './photos-service';
 import {
   RoverName,
   PhotoDisplayData,
   PhotosDataOptions,
   CameraName,
+  CameraInfo,
 } from '@/types/photos';
 
 interface LatestImagesProps {
@@ -178,21 +180,14 @@ export const LatestImages: React.FC<LatestImagesProps> = ({
     photosOptions
   );
 
+  // Fetch available cameras for the rover
+  const { data: availableCameras = [] } = useCameraData(selectedRover);
+  const cameras = (availableCameras as CameraInfo[]) || [];
+
   // Transform photos for display
   const displayPhotos = useMemo(() => {
     if (!data?.data.photos) return [];
     return data.data.photos.map(PhotosService.transformForDisplay);
-  }, [data]);
-
-  // Get unique cameras from current photos
-  const availableCameras = useMemo(() => {
-    if (!data?.data.photos) return [];
-    const cameras = data.data.photos.map((photo) => photo.camera);
-    const unique = cameras.filter(
-      (camera, index, self) =>
-        index === self.findIndex((c) => c.name === camera.name)
-    );
-    return unique;
   }, [data]);
 
   const handlePhotoClick = (index: number): void => {
@@ -279,14 +274,14 @@ export const LatestImages: React.FC<LatestImagesProps> = ({
           )}
 
           {/* Camera filter */}
-          {showCameraFilter && availableCameras.length > 0 && (
+          {showCameraFilter && cameras.length > 0 && (
             <select
               value={selectedCamera}
               onChange={(e) => setSelectedCamera(e.target.value)}
               className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
             >
               <option value="">All Cameras</option>
-              {availableCameras.map((camera) => (
+              {cameras.map((camera) => (
                 <option key={camera.name} value={camera.name}>
                   {camera.name} - {camera.fullName}
                 </option>

@@ -15,6 +15,8 @@ export type CameraName =
   | 'MAHLI' // Mars Hand Lens Imager
   | 'MARDI' // Mars Descent Imager
   | 'NAVCAM' // Navigation Camera
+  | 'NAVCAM_LEFT' // Navigation Camera - Left
+  | 'NAVCAM_RIGHT' // Navigation Camera - Right
   | 'PANCAM' // Panoramic Camera
   | 'MINITES' // Miniature Thermal Emission Spectrometer
   | 'EDL_RUCAM' // Entry, Descent, and Landing - Rover Up-Look Camera
@@ -23,7 +25,10 @@ export type CameraName =
   | 'EDL_PUCAM1' // Entry, Descent, and Landing - Parachute Up-Look Camera A
   | 'EDL_PUCAM2' // Entry, Descent, and Landing - Parachute Up-Look Camera B
   | 'SUPERCAM_RMI' // SuperCam Remote Micro-Imager
-  | 'PIXL'; // Planetary Instrument for X-ray Lithochemistry
+  | 'PIXL' // Planetary Instrument for X-ray Lithochemistry
+  | 'MCZCAM' // Mast Camera Zoom
+  | 'MCZCAM_LEFT' // Mast Camera Zoom - Left
+  | 'MCZCAM_RIGHT'; // Mast Camera Zoom - Right
 
 /** Camera information */
 export interface CameraInfo {

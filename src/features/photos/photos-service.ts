@@ -50,6 +50,27 @@ interface NASAPhotosResponse {
   photos?: NASARawPhoto[];
 }
 
+/**
+ * NASA Mission Manifest response structure
+ */
+interface NASAManifestResponse {
+  photo_manifest: {
+    name: string;
+    landing_date: string;
+    launch_date: string;
+    status: string;
+    max_sol: number;
+    max_date: string;
+    total_photos: number;
+    photos: Array<{
+      sol: number;
+      earth_date: string;
+      total_photos: number;
+      cameras: string[];
+    }>;
+  };
+}
+
 export class PhotosService {
   /**
    * Fetches latest photos for a specific rover
@@ -259,5 +280,187 @@ export class PhotosService {
     options: Omit<PhotosDataOptions, 'earthDate'> = {}
   ): Promise<PhotosApiResponse> {
     return this.getLatestPhotos(rover, { ...options, earthDate });
+  }
+
+  /**
+   * Get mission manifest for a rover
+   * Returns all available cameras and mission details
+   */
+  static async getRoverManifest(rover: RoverName): Promise<{
+    cameras: CameraInfo[];
+    maxSol: number;
+    status: string;
+  }> {
+    try {
+      const params = new URLSearchParams({
+        api_key: NASA_API_KEY,
+      });
+
+      const url = `${NASA_API_BASE}/manifests/${rover}?${params.toString()}`;
+
+      const response = await this.fetchWithRetry(url, {
+        timeout: 15000,
+        retries: 2,
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `NASA Manifest API responded with ${response.status}: ${response.statusText}`
+        );
+      }
+
+      const data: NASAManifestResponse = await response.json();
+      const manifest = data.photo_manifest;
+
+      // Extract unique cameras from all sols
+      const allCameraNames = new Set<string>();
+      manifest.photos.forEach((photoGroup) => {
+        photoGroup.cameras.forEach((camera) => allCameraNames.add(camera));
+      });
+
+      // Convert to CameraInfo objects with mock data for cameras not in types
+      const cameras: CameraInfo[] = Array.from(allCameraNames).map(
+        (cameraName, index) => ({
+          id: index + 1,
+          name: cameraName as CameraName,
+          fullName: this.getCameraFullName(cameraName as CameraName),
+          roverId: rover === 'curiosity' ? 5 : 8, // Approximated rover IDs
+        })
+      );
+
+      return {
+        cameras,
+        maxSol: manifest.max_sol,
+        status: manifest.status,
+      };
+    } catch (error) {
+      console.error(`Error fetching manifest for ${rover}:`, error);
+
+      // Return fallback cameras if API fails
+      return {
+        cameras: this.getFallbackCameras(rover),
+        maxSol: 0,
+        status: 'unknown',
+      };
+    }
+  }
+
+  /**
+   * Get camera full name from camera abbreviation
+   */
+  private static getCameraFullName(cameraName: CameraName): string {
+    const cameraNames: Record<string, string> = {
+      FHAZ: 'Front Hazard Avoidance Camera',
+      RHAZ: 'Rear Hazard Avoidance Camera',
+      MAST: 'Mast Camera',
+      CHEMCAM: 'Chemistry and Camera Complex',
+      MAHLI: 'Mars Hand Lens Imager',
+      MARDI: 'Mars Descent Imager',
+      NAVCAM: 'Navigation Camera',
+      NAVCAM_LEFT: 'Navigation Camera - Left',
+      NAVCAM_RIGHT: 'Navigation Camera - Right',
+      PANCAM: 'Panoramic Camera',
+      MINITES: 'Miniature Thermal Emission Spectrometer',
+      EDL_RUCAM: 'Entry, Descent, and Landing - Rover Up-Look Camera',
+      EDL_RDCAM: 'Entry, Descent, and Landing - Rover Down-Look Camera',
+      EDL_DDCAM: 'Entry, Descent, and Landing - Descent Stage Down-Look Camera',
+      EDL_PUCAM1: 'Entry, Descent, and Landing - Parachute Up-Look Camera A',
+      EDL_PUCAM2: 'Entry, Descent, and Landing - Parachute Up-Look Camera B',
+      SUPERCAM_RMI: 'SuperCam Remote Micro-Imager',
+      PIXL: 'Planetary Instrument for X-ray Lithochemistry',
+      MCZCAM: 'Mast Camera Zoom',
+      MCZCAM_LEFT: 'Mast Camera Zoom - Left',
+      MCZCAM_RIGHT: 'Mast Camera Zoom - Right',
+    };
+
+    return (
+      cameraNames[cameraName] ||
+      cameraName.charAt(0).toUpperCase() + cameraName.slice(1).toLowerCase()
+    );
+  }
+
+  /**
+   * Get fallback cameras for rover if API fails
+   */
+  private static getFallbackCameras(rover: RoverName): CameraInfo[] {
+    const curiosityCameras: CameraInfo[] = [
+      {
+        id: 1,
+        name: 'FHAZ' as CameraName,
+        fullName: 'Front Hazard Avoidance Camera',
+        roverId: 5,
+      },
+      {
+        id: 2,
+        name: 'RHAZ' as CameraName,
+        fullName: 'Rear Hazard Avoidance Camera',
+        roverId: 5,
+      },
+      {
+        id: 3,
+        name: 'MAST' as CameraName,
+        fullName: 'Mast Camera',
+        roverId: 5,
+      },
+      {
+        id: 4,
+        name: 'CHEMCAM' as CameraName,
+        fullName: 'Chemistry and Camera Complex',
+        roverId: 5,
+      },
+      {
+        id: 5,
+        name: 'MAHLI' as CameraName,
+        fullName: 'Mars Hand Lens Imager',
+        roverId: 5,
+      },
+      {
+        id: 6,
+        name: 'MARDI' as CameraName,
+        fullName: 'Mars Descent Imager',
+        roverId: 5,
+      },
+      {
+        id: 7,
+        name: 'NAVCAM' as CameraName,
+        fullName: 'Navigation Camera',
+        roverId: 5,
+      },
+    ];
+
+    const perseveranceCameras: CameraInfo[] = [
+      {
+        id: 1,
+        name: 'FHAZ' as CameraName,
+        fullName: 'Front Hazard Avoidance Camera',
+        roverId: 8,
+      },
+      {
+        id: 2,
+        name: 'RHAZ' as CameraName,
+        fullName: 'Rear Hazard Avoidance Camera',
+        roverId: 8,
+      },
+      {
+        id: 3,
+        name: 'NAVCAM' as CameraName,
+        fullName: 'Navigation Camera',
+        roverId: 8,
+      },
+      {
+        id: 4,
+        name: 'SUPERCAM_RMI' as CameraName,
+        fullName: 'SuperCam Remote Micro-Imager',
+        roverId: 8,
+      },
+      {
+        id: 5,
+        name: 'PIXL' as CameraName,
+        fullName: 'Planetary Instrument for X-ray Lithochemistry',
+        roverId: 8,
+      },
+    ];
+
+    return rover === 'curiosity' ? curiosityCameras : perseveranceCameras;
   }
 }

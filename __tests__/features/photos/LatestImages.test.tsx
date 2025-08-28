@@ -12,6 +12,11 @@ import { LatestPhotosData, MarsPhoto } from '@/types/photos';
 jest.mock('@/features/photos/usePhotosData');
 const mockUsePhotosData = jest.mocked(usePhotosData);
 
+// Mock the useCameraData hook
+jest.mock('@/features/photos/useCameraData');
+import { useCameraData } from '@/features/photos/useCameraData';
+const mockUseCameraData = jest.mocked(useCameraData);
+
 // Mock framer-motion to avoid animation issues in tests
 jest.mock('framer-motion', () => ({
   motion: {
@@ -81,6 +86,38 @@ const renderComponent = (component: React.ReactElement): void => {
 describe('LatestImages', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // Mock camera data - return some common cameras
+    mockUseCameraData.mockReturnValue({
+      data: [
+        {
+          id: 1,
+          name: 'FHAZ',
+          fullName: 'Front Hazard Avoidance Camera',
+          roverId: 5,
+        },
+        {
+          id: 2,
+          name: 'RHAZ',
+          fullName: 'Rear Hazard Avoidance Camera',
+          roverId: 5,
+        },
+        {
+          id: 3,
+          name: 'NAVCAM_LEFT',
+          fullName: 'Navigation Camera - Left',
+          roverId: 5,
+        },
+        {
+          id: 4,
+          name: 'NAVCAM_RIGHT',
+          fullName: 'Navigation Camera - Right',
+          roverId: 5,
+        },
+      ],
+      isLoading: false,
+      error: null,
+    } as unknown as ReturnType<typeof useCameraData>);
   });
 
   it('renders loading state correctly', () => {
@@ -251,9 +288,14 @@ describe('LatestImages', () => {
       expect(cameraSelect).toBeInTheDocument();
 
       // Check that camera options are present
-      expect(screen.getByText(/MAST - Mast Camera/)).toBeInTheDocument();
       expect(
-        screen.getByText(/NAVCAM - Navigation Camera/)
+        screen.getByText(/FHAZ - Front Hazard Avoidance Camera/)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/NAVCAM_LEFT - Navigation Camera - Left/)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/NAVCAM_RIGHT - Navigation Camera - Right/)
       ).toBeInTheDocument();
     });
   });
