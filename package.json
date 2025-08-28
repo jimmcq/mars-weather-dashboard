@@ -42,6 +42,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
+      "yarn type-check",
       "eslint --fix",
       "prettier --write",
       "yarn test:ci --bail --passWithNoTests"
