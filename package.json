@@ -31,6 +31,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:ci": "NODE_OPTIONS='--max-old-space-size=2048' CI=true NODE_ENV=production next build",
     "start": "next start",
     "start:lighthouse": "node scripts/start-for-lighthouse.js",
     "lint": "next lint",

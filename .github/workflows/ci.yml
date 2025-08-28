@@ -33,7 +33,7 @@ jobs:
         run: yarn test:ci
       
       - name: Build
-        run: yarn build
+        run: yarn build:ci
       
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

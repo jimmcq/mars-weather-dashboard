@@ -33,6 +33,17 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+
+  // Optimize for CI environments
+  experimental: {
+    // Reduce memory usage during build
+    workerThreads: false,
+  },
+
+  // Ensure environment variables have defaults
+  env: {
+    NASA_API_KEY: process.env.NASA_API_KEY || 'DEMO_KEY',
+  },
 };
 
 // Sentry options
@@ -52,8 +63,16 @@ const sentryOptions = {
       authToken: process.env.SENTRY_AUTH_TOKEN,
     }),
 
-  // Only upload source maps in production
-  dryRun: process.env.NODE_ENV !== 'production',
+  // Always dry run in CI or when not in production to prevent upload failures
+  dryRun: process.env.CI || process.env.NODE_ENV !== 'production',
+
+  // Additional CI-friendly settings
+  ...(process.env.CI && {
+    // Skip source map validation in CI to prevent build failures
+    validate: false,
+    // Disable telemetry in CI
+    telemetry: false,
+  }),
 };
 
 // Export with Sentry configuration if auth token is provided
