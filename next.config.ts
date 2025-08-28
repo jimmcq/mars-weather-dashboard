@@ -49,11 +49,12 @@ const sentryOptions = {
   // Suppresses source map uploading logs during build
   silent: true,
   
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  
-  // Auth token for uploading source maps
-  authToken: process.env.SENTRY_AUTH_TOKEN,
+  // Only include if all required values are present
+  ...(process.env.SENTRY_ORG && process.env.SENTRY_PROJECT && process.env.SENTRY_AUTH_TOKEN && {
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+  }),
   
   // Only upload source maps in production
   dryRun: process.env.NODE_ENV !== 'production',

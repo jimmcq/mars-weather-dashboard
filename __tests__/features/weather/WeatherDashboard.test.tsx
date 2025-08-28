@@ -14,7 +14,7 @@ jest.mock('@/features/weather/useWeatherData', () => ({
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: React.ComponentProps<'div'>) => <div {...props}>{children}</div>,
   },
 }));
 
@@ -39,7 +39,7 @@ const mockWeatherData = {
       quality: 'complete' as const,
     },
     rover: 'curiosity' as const,
-    instrument: 'REMS',
+    instrument: 'REMS' as const,
     dataQuality: 'complete' as const,
     location: {
       latitude: -4.5895,
@@ -66,6 +66,7 @@ describe('WeatherDashboard', () => {
       isLoading: true,
       error: null,
       refetch: jest.fn(),
+      lastFetch: null,
     });
 
     render(<WeatherDashboard />);

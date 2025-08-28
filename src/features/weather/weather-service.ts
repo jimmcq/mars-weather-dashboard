@@ -91,7 +91,11 @@ export class WeatherService {
       Sentry.withScope((scope) => {
         scope.setTag('service', 'WeatherService');
         scope.setTag('rover', rover);
-        scope.setContext('options', options);
+        scope.setContext('options', {
+          historyDays: options.historyDays || 7,
+          temperatureUnit: options.temperatureUnit || 'celsius',
+          includeEstimated: options.includeEstimated || false,
+        });
         scope.setLevel('error');
         Sentry.captureException(error as Error);
       });

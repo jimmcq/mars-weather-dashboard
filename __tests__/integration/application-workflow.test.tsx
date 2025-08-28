@@ -11,15 +11,15 @@ import HomePage from '@/app/page';
 // Mock Next.js Image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} />,
+  default: ({ alt = '', ...props }: React.ComponentProps<'img'>) => <img alt={alt} {...props} />,
 }));
 
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: React.ComponentProps<'div'>) => <div {...props}>{children}</div>,
   },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 // Mock the services
@@ -73,7 +73,7 @@ const mockWeatherData = {
       quality: 'complete' as const,
     },
     rover: 'curiosity' as const,
-    instrument: 'REMS',
+    instrument: 'REMS' as const,
     dataQuality: 'complete' as const,
     location: {
       latitude: -4.5895,

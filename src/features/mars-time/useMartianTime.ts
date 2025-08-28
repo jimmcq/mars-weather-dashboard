@@ -42,7 +42,10 @@ export function useMartianTime(
         // Report to Sentry
         Sentry.withScope((scope) => {
           scope.setTag('hook', 'useMartianTime');
-          scope.setContext('options', options);
+          scope.setContext('options', {
+            updateInterval: options.updateInterval || 1000,
+            includePrecision: options.includePrecision || false,
+          });
           scope.setLevel('error');
           Sentry.captureException(error as Error);
         });

@@ -7,8 +7,9 @@ import * as Sentry from '@sentry/nextjs';
 
 const SENTRY_DSN = process.env.SENTRY_DSN;
 
-Sentry.init({
-  dsn: SENTRY_DSN,
+if (SENTRY_DSN) {
+  Sentry.init({
+    dsn: SENTRY_DSN,
   
   // Performance Monitoring
   tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
@@ -18,7 +19,7 @@ Sentry.init({
   release: process.env.SENTRY_RELEASE || 'mars-weather-dashboard@0.1.0',
   
   // Configure what gets sent to Sentry
-  beforeSend(event, hint) {
+  beforeSend(event) {
     // Don't send events if no DSN is configured
     if (!SENTRY_DSN) {
       return null;
@@ -55,4 +56,5 @@ Sentry.init({
   
   // Debug mode
   debug: process.env.NODE_ENV === 'development',
-});
+  });
+}

@@ -11,7 +11,7 @@ import { WeatherDashboard } from '@/features/weather/WeatherDashboard';
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: React.ComponentProps<'div'>) => <div {...props}>{children}</div>,
   },
 }));
 
@@ -43,7 +43,7 @@ const mockWeatherData = {
       quality: 'complete' as const,
     },
     rover: 'curiosity' as const,
-    instrument: 'REMS',
+    instrument: 'REMS' as const,
     dataQuality: 'complete' as const,
     location: {
       latitude: -4.5895,
@@ -269,7 +269,7 @@ describe('Weather Dashboard Workflow Integration', () => {
       latest: {
         ...mockWeatherData.latest,
         rover: 'perseverance' as const,
-        instrument: 'MEDA',
+        instrument: 'MEDA' as const,
         location: {
           ...mockWeatherData.latest.location,
           locationName: 'Jezero Crater',
