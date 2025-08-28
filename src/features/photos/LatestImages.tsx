@@ -18,14 +18,10 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { usePhotosData } from './usePhotosData';
-import { useCameraData } from './useCameraData';
 import { PhotosService } from './photos-service';
 import {
   RoverName,
   PhotoDisplayData,
-  PhotosDataOptions,
-  CameraName,
-  CameraInfo,
 } from '@/types/photos';
 
 interface LatestImagesProps {
@@ -167,28 +163,38 @@ export const LatestImages: React.FC<LatestImagesProps> = ({
     null
   );
 
-  const photosOptions = useMemo(() => {
-    const options: PhotosDataOptions = { limit };
-    if (selectedCamera) {
-      options.camera = selectedCamera as CameraName;
-    }
-    return options;
-  }, [limit, selectedCamera]);
+  // Always fetch photos without camera filter to get available cameras
+  const photosOptions = useMemo(() => ({ limit }), [limit]);
 
   const { data, isLoading, error, refetch } = usePhotosData(
     selectedRover,
     photosOptions
   );
 
-  // Fetch available cameras for the rover
-  const { data: availableCameras = [] } = useCameraData(selectedRover);
-  const cameras = (availableCameras as CameraInfo[]) || [];
+  // Get available cameras from current photos (only cameras with actual photos)
+  const availableCameras = useMemo(() => {
+    if (!data?.data.photos) return [];
+    const cameras = data.data.photos.map((photo) => photo.camera);
+    const unique = cameras.filter(
+      (camera, index, self) =>
+        index === self.findIndex((c) => c.name === camera.name)
+    );
+    return unique;
+  }, [data]);
 
-  // Transform photos for display
+  // Transform and filter photos for display
   const displayPhotos = useMemo(() => {
     if (!data?.data.photos) return [];
-    return data.data.photos.map(PhotosService.transformForDisplay);
-  }, [data]);
+    
+    let photos = data.data.photos;
+    
+    // Apply camera filter if selected
+    if (selectedCamera) {
+      photos = photos.filter((photo) => photo.camera.name === selectedCamera);
+    }
+    
+    return photos.map(PhotosService.transformForDisplay);
+  }, [data, selectedCamera]);
 
   const handlePhotoClick = (index: number): void => {
     setSelectedPhotoIndex(index);
@@ -274,14 +280,14 @@ export const LatestImages: React.FC<LatestImagesProps> = ({
           )}
 
           {/* Camera filter */}
-          {showCameraFilter && cameras.length > 0 && (
+          {showCameraFilter && availableCameras.length > 0 && (
             <select
               value={selectedCamera}
               onChange={(e) => setSelectedCamera(e.target.value)}
               className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
             >
               <option value="">All Cameras</option>
-              {cameras.map((camera) => (
+              {availableCameras.map((camera) => (
                 <option key={camera.name} value={camera.name}>
                   {camera.name} - {camera.fullName}
                 </option>
@@ -306,11 +312,11 @@ export const LatestImages: React.FC<LatestImagesProps> = ({
 
         {!isLoading && displayPhotos.length === 0 && (
           <div className="py-12 text-center">
-            <Camera className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-4 text-lg font-medium text-gray-900">
+            <Camera className="mx-auto h-12 w-12 text-slate-400" />
+            <h3 className="mt-4 text-lg font-medium text-white">
               No Images Available
             </h3>
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-2 text-sm text-slate-300">
               No photos found for the selected criteria.
             </p>
           </div>
