@@ -1,5 +1,5 @@
 import { withSentryConfig } from '@sentry/nextjs';
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
@@ -30,14 +30,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  
-  // Sentry configuration
-  sentry: {
-    // Hide source maps from public
-    hideSourceMaps: true,
-    
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true,
+  turbopack: {
+    root: __dirname,
   },
 };
 
@@ -45,17 +39,19 @@ const nextConfig: NextConfig = {
 const sentryOptions = {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
-  
+
   // Suppresses source map uploading logs during build
   silent: true,
-  
+
   // Only include if all required values are present
-  ...(process.env.SENTRY_ORG && process.env.SENTRY_PROJECT && process.env.SENTRY_AUTH_TOKEN && {
-    org: process.env.SENTRY_ORG,
-    project: process.env.SENTRY_PROJECT,
-    authToken: process.env.SENTRY_AUTH_TOKEN,
-  }),
-  
+  ...(process.env.SENTRY_ORG &&
+    process.env.SENTRY_PROJECT &&
+    process.env.SENTRY_AUTH_TOKEN && {
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    }),
+
   // Only upload source maps in production
   dryRun: process.env.NODE_ENV !== 'production',
 };

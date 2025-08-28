@@ -14,6 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NODE_ENV === 'production'
+      ? 'https://mars-weather-dashboard.vercel.app'
+      : 'http://localhost:3000'
+  ),
   title: 'Mars Weather Dashboard',
   description:
     "Real-time Martian time and planetary data using NASA's Mars24 algorithm",

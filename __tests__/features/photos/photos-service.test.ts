@@ -253,12 +253,18 @@ describe('PhotosService', () => {
   it('uses DEMO_KEY when NASA_API_KEY is not set', async () => {
     delete process.env.NASA_API_KEY;
 
+    // Clear module cache to ensure the service re-reads the environment
+    jest.resetModules();
+    const { PhotosService: ReloadedPhotosService } = await import(
+      '@/features/photos/photos-service'
+    );
+
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockNASAResponse,
     } as Response);
 
-    await PhotosService.getLatestPhotos('curiosity');
+    await ReloadedPhotosService.getLatestPhotos('curiosity');
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining('api_key=DEMO_KEY'),
