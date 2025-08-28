@@ -9,6 +9,20 @@ import { useState, useEffect } from 'react';
 import { MarsTimeCalculator } from './time-conversion';
 import { MarsTimeData, MarsTimeOptions } from '@/types/mars-time';
 
+/**
+ * Custom hook for real-time Mars time calculations
+ *
+ * Provides:
+ * - Coordinated Mars Time (MTC)
+ * - Local True Solar Time for both rovers
+ * - Mission sol numbers
+ * - Real-time updates with configurable intervals
+ *
+ * @param {MarsTimeOptions} options - Configuration options for the hook
+ * @param {number} options.updateInterval - Update frequency in milliseconds (default: 1000)
+ * @param {boolean} options.includePrecision - Include high-precision calculations (default: false)
+ * @returns {MarsTimeData | null} Current Mars time data or null during initialization
+ */
 export function useMartianTime(
   options: MarsTimeOptions = {}
 ): MarsTimeData | null {

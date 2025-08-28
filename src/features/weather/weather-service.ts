@@ -16,6 +16,7 @@ import {
   DataQuality,
 } from '@/types/weather';
 import { ROVER_LOCATIONS } from '@/lib/constants';
+import { ApiResilience } from '@/lib/retry';
 
 /**
  * Weather Service Class
@@ -112,13 +113,50 @@ export class WeatherService {
         ? this.CURIOSITY_PHOTOS_URL
         : this.PERSEVERANCE_PHOTOS_URL;
 
-    const response = await fetch(`${apiUrl}?api_key=${this.NASA_API_KEY}`, {
-      next: { revalidate: 300 }, // 5 minute cache
-    });
+    // Use resilient fetch with retry logic and circuit breaker
+    const response = await ApiResilience.resilientFetch(
+      `${apiUrl}?api_key=${this.NASA_API_KEY}`,
+      {
+        next: { revalidate: 300 }, // 5 minute cache
+        headers: {
+          Accept: 'application/json',
+          'User-Agent': 'Mars-Weather-Dashboard/1.0',
+        },
+      },
+      {
+        circuitName: `nasa-photos-${rover}`,
+        retryOptions: {
+          maxAttempts: 3,
+          initialDelayMs: 1000,
+          maxDelayMs: 5000,
+          shouldRetry: (error) => {
+            const message = error.message.toLowerCase();
+            return (
+              message.includes('timeout') ||
+              message.includes('network') ||
+              message.includes('500') ||
+              message.includes('502') ||
+              message.includes('503')
+            );
+          },
+          onRetry: (attempt, error) => {
+            console.warn(
+              `Retrying NASA Photos API (attempt ${attempt}) for ${rover}: ${error.message}`
+            );
+          },
+        },
+        circuitOptions: {
+          failureThreshold: 5,
+          resetTimeoutMs: 120000, // 2 minutes
+        },
+      }
+    );
 
+    // Additional response validation
     if (!response.ok) {
+      const errorText = await response.text().catch(() => 'Unknown error');
       throw new Error(
-        `NASA API error: ${response.status} ${response.statusText}`
+        `NASA API error: ${response.status} ${response.statusText} - ${errorText}`
       );
     }
 

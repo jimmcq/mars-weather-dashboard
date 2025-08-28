@@ -9,6 +9,19 @@ import { useMartianTime } from './useMartianTime';
 import { Clock, MapPin, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+/**
+ * Real-time Martian Clock component displaying current Mars time for both rover locations
+ *
+ * Features:
+ * - Coordinated Mars Time (MTC) - universal Mars time
+ * - Local True Solar Time (LTST) for each rover location
+ * - Mission sol numbers for each rover
+ * - Real-time updates every second
+ * - Accessible with ARIA live regions
+ * - Smooth animations with Framer Motion
+ *
+ * @returns {React.ReactElement} The MartianClock component
+ */
 export function MartianClock(): React.ReactElement {
   const marsTime = useMartianTime();
 
