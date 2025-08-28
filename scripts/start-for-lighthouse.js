@@ -12,9 +12,9 @@ server.stdout.on('data', (data) => {
   const output = data.toString();
   console.log(output);
   
-  // Check if server is ready (Next.js outputs "Ready on" or similar)
-  if (output.includes('Local:') || output.includes('ready') || output.includes('listen') || output.includes('Ready on')) {
-    console.log('Server is ready!');
+  // Check if server is ready and output explicit ready message
+  if (output.includes('Ready on') || output.includes('Local:') || output.includes('- Local:')) {
+    console.log('✓ Server is ready and listening on Local: http://localhost:3000');
   }
 });
 
