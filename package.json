@@ -42,9 +42,9 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn type-check",
       "eslint --fix",
       "prettier --write",
+      "yarn type-check",
       "yarn test:ci --bail --passWithNoTests"
     ],
     "*.{json,md,css}": [
