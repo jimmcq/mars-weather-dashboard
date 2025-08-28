@@ -32,7 +32,7 @@ const mockWeatherData = {
       quality: 'complete' as const,
     },
     rover: 'curiosity' as const,
-    instrument: 'REMS',
+    instrument: 'REMS' as const,
     dataQuality: 'complete' as const,
     location: {
       latitude: -4.5895,

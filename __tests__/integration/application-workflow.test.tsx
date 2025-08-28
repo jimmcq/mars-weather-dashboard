@@ -90,39 +90,41 @@ const mockWeatherData = {
 };
 
 const mockPhotoData = {
-  photos: [
-    {
-      id: 1,
-      sol: 4000,
-      camera: {
-        id: 20,
-        name: 'FHAZ',
-        rover_id: 5,
-        full_name: 'Front Hazard Avoidance Camera',
+  data: {
+    photos: [
+      {
+        id: 1,
+        sol: 4000,
+        earthDate: '2024-01-01',
+        imgSrc: 'https://mars.nasa.gov/msl-raw-images/proj/msl/redops/rvr/imgs/2023/1234.jpg',
+        camera: {
+          id: 20,
+          name: 'FHAZ' as const,
+          fullName: 'Front Hazard Avoidance Camera',
+          roverId: 5,
+        },
+        rover: {
+          id: 5,
+          name: 'curiosity' as const,
+          landingDate: '2012-08-05',
+          launchDate: '2011-11-26',
+          status: 'active' as const,
+          maxSol: 4000,
+          maxDate: '2024-01-01',
+          totalPhotos: 500000,
+        },
       },
-      img_src: 'https://mars.nasa.gov/msl-raw-images/proj/msl/redops/rvr/imgs/2023/1234.jpg',
-      earth_date: '2024-01-01',
-      rover: {
-        id: 5,
-        name: 'curiosity',
-        landing_date: '2012-08-05',
-        launch_date: '2011-11-26',
-        status: 'active',
-        max_sol: 4000,
-        max_date: '2024-01-01',
-        total_photos: 500000,
-        cameras: [],
-      },
-    },
-  ],
-  latest: {
-    sol: 4000,
-    earth_date: '2024-01-01',
-    total_photos: 1,
+    ],
+    totalPhotos: 1,
+    rover: 'curiosity' as const,
+    lastFetch: '2024-01-01T00:00:00Z',
+    status: 'success' as const,
   },
-  rover: 'curiosity' as const,
-  requestTime: '2024-01-01T00:00:00Z',
-  cached: false,
+  meta: {
+    count: 1,
+    requestTime: '2024-01-01T00:00:00Z',
+    cached: false,
+  },
 };
 
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -170,13 +172,23 @@ describe('Complete Application Workflow Integration', () => {
       imgSrc: 'https://mars.nasa.gov/msl-raw-images/proj/msl/redops/rvr/imgs/2023/1234.jpg',
       earthDate: '2024-01-01',
       camera: {
-        name: 'FHAZ',
+        id: 20,
+        name: 'FHAZ' as const,
         fullName: 'Front Hazard Avoidance Camera',
+        roverId: 5,
       },
       rover: {
-        name: 'curiosity',
+        id: 5,
+        name: 'curiosity' as const,
+        landingDate: '2012-08-05',
+        launchDate: '2011-11-26',
+        status: 'active' as const,
+        maxSol: 4000,
+        maxDate: '2024-01-01',
+        totalPhotos: 500000,
       },
       altText: 'Mars photo from Front Hazard Avoidance Camera on Sol 4000',
+      loadingState: 'loaded' as const,
     });
 
     render(

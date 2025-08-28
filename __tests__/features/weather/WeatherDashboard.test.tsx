@@ -84,6 +84,7 @@ describe('WeatherDashboard', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
+      lastFetch: '2024-01-01T00:00:00Z',
     });
 
     render(<WeatherDashboard />);
@@ -112,8 +113,9 @@ describe('WeatherDashboard', () => {
     mockUseWeatherData.mockReturnValue({
       data: null,
       isLoading: false,
-      error: new Error('Failed to fetch weather data'),
+      error: 'Failed to fetch weather data',
       refetch: mockRefetch,
+      lastFetch: null,
     });
 
     render(<WeatherDashboard />);
@@ -135,6 +137,7 @@ describe('WeatherDashboard', () => {
       isLoading: false,
       error: null,
       refetch: mockRefetch,
+      lastFetch: '2024-01-01T00:00:00Z',
     });
 
     render(<WeatherDashboard />);
@@ -175,6 +178,7 @@ describe('WeatherDashboard', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
+      lastFetch: '2024-01-01T00:00:00Z',
     });
 
     render(<WeatherDashboard />);
@@ -202,6 +206,7 @@ describe('WeatherDashboard', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
+      lastFetch: '2024-01-01T00:00:00Z',
     });
 
     render(<WeatherDashboard />);
@@ -216,6 +221,7 @@ describe('WeatherDashboard', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
+      lastFetch: '2024-01-01T00:00:00Z',
     });
 
     render(<WeatherDashboard />);
@@ -229,6 +235,7 @@ describe('WeatherDashboard', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
+      lastFetch: '2024-01-01T00:00:00Z',
     });
 
     render(<WeatherDashboard />);
@@ -244,7 +251,7 @@ describe('WeatherDashboard', () => {
       latest: {
         ...mockWeatherData.latest,
         rover: 'perseverance' as const,
-        instrument: 'MEDA',
+        instrument: 'MEDA' as const,
         location: {
           ...mockWeatherData.latest.location,
           locationName: 'Jezero Crater',
@@ -257,6 +264,7 @@ describe('WeatherDashboard', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
+      lastFetch: '2024-01-01T00:00:00Z',
     });
 
     render(<WeatherDashboard />);
@@ -272,6 +280,7 @@ describe('WeatherDashboard', () => {
       isLoading: false,
       error: null,
       refetch: jest.fn(),
+      lastFetch: '2024-01-01T00:00:00Z',
     });
 
     render(<WeatherDashboard />);
