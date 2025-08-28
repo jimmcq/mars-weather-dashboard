@@ -3,7 +3,7 @@
 > A production-quality web application showcasing real-time Martian weather data and planetary time calculations
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/jimmcq/mars-weather-dashboard)
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://mars-weather-dashboard-one.vercel.app/) 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://mars-weather-dashboard-one.vercel.app/)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript)](https://typescriptlang.org)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-blue?logo=tailwindcss)](https://tailwindcss.com)
@@ -11,7 +11,7 @@
 ## 🌟 Project Goals
 
 - **🧮 Complex Algorithm Implementation**: Mars time calculations using NASA's Mars24 algorithm
-- **⚡ Modern React Patterns**: Next.js 14 App Router with Server/Client component architecture  
+- **⚡ Modern React Patterns**: Next.js 14 App Router with Server/Client component architecture
 - **🔒 Production-Ready Code**: Comprehensive TypeScript, testing, and error handling
 - **🎨 Professional UI/UX**: Real-time updates with smooth animations and accessibility
 - **📊 Data Integration**: NASA API consumption with robust fallback strategies
@@ -19,46 +19,73 @@
 ## ✨ Features
 
 ### Currently Implemented
+
 - **🕒 Real-time Martian Clock**: Live time calculations for both rover locations
-  - Coordinated Mars Time (MTC) 
+  - Coordinated Mars Time (MTC)
   - Local True Solar Time for Curiosity (Gale Crater)
   - Local True Solar Time for Perseverance (Jezero Crater)
   - Mission sol numbers for both rovers
   - Updates every second with astronomical precision
 
-### Coming Soon
-- **🌡️ Weather Data**: Temperature, pressure, and atmospheric conditions
-- **📊 Historical Trends**: Interactive charts and seasonal patterns
+- **🌡️ Weather Dashboard**: Comprehensive weather data visualization
+  - Current atmospheric conditions for both rovers
+  - Temperature, pressure, and wind measurements
+  - Historical weather trends with interactive charts
+  - Data quality indicators and source attribution
+  - Graceful fallback strategies for API reliability
+
 - **📸 Latest Images**: Recent photos from Mars rovers
+  - Real-time photo feeds from Curiosity and Perseverance
+  - Camera information and photo metadata
+  - Responsive image galleries with optimized loading
+
+- **🔧 Production-Grade Infrastructure**:
+  - Comprehensive error handling and resilience patterns
+  - NASA API rate limiting and caching strategies
+  - Real-time monitoring with Sentry integration
+  - Automated CI/CD pipeline with quality gates
+
+### Coming Soon
+
 - **🔄 Data Export**: Download weather history as CSV
 - **🌙 Comparison Mode**: Side-by-side rover data analysis
+- **📊 Extended Historical Analysis**: Long-term weather pattern visualization
 
 ## 🛠️ Tech Stack
 
 - **Framework**: Next.js 15 (App Router) with TypeScript
 - **Styling**: Tailwind CSS with custom design system
+- **State Management**: TanStack Query for server state management
 - **Animation**: Framer Motion for smooth transitions
+- **Charts**: Recharts for interactive data visualization
 - **Icons**: Lucide React for consistent iconography
-- **Testing**: Jest + React Testing Library (100% coverage on time calculations)
-- **Deployment**: Optimized for Vercel with ISR
+- **Testing**: Jest + React Testing Library + MSW for API mocking
+- **Monitoring**: Sentry for error tracking and performance monitoring
+- **CI/CD**: GitHub Actions with Lighthouse CI for performance testing
+- **Deployment**: Vercel with ISR and optimized caching strategies
 
 ## 🧮 Technical Deep Dive: Mars Time Calculations
 
 ### The Challenge
+
 Mars has a different day length (24h 37m 22s) and orbital period than Earth, requiring complex calculations to convert between planetary times.
 
 ### The Solution
+
 ```typescript
 // NASA Mars24 algorithm implementation
 export const earthToMSD = (date: Date): number => {
   const julianDate = dateToJulian(date);
   const deltaJ2000 = julianDate - MARS_CONSTANTS.J2000_EPOCH;
-  return (deltaJ2000 - 4.5) / MARS_CONSTANTS.EARTH_TO_MARS_DAY_RATIO + 
-         MARS_CONSTANTS.MSD_EPOCH_OFFSET;
+  return (
+    (deltaJ2000 - 4.5) / MARS_CONSTANTS.EARTH_TO_MARS_DAY_RATIO +
+    MARS_CONSTANTS.MSD_EPOCH_OFFSET
+  );
 };
 ```
 
 ### Why This Matters
+
 - **Mathematical Programming**: Demonstrates ability to implement scientific algorithms
 - **Precision Engineering**: All calculations verified against NASA reference data
 - **Real-time Performance**: Optimized for continuous updates without performance impact
@@ -67,80 +94,105 @@ export const earthToMSD = (date: Date): number => {
 
 ```bash
 # Clone and install dependencies
-git clone <repository-url>
+git clone https://github.com/jimmcq/mars-weather-dashboard.git
 cd mars-weather-dashboard
-npm install
+yarn install
+
+# Set up environment variables (optional - DEMO_KEY works for development)
+cp .env.example .env.local
 
 # Start development server
-npm run dev
+yarn dev
 
 # Run tests with coverage
-npm run test:ci
+yarn test:ci
+
+# Run type checking
+yarn type-check
 
 # Build for production
-npm run build
+yarn build
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to see the live Mars clock in action.
 
 ## 🧪 Testing Philosophy
 
-This project prioritizes **test coverage where it matters most**:
+This project demonstrates **professional testing practices**:
 
 - **🎯 100% Coverage**: Mars time calculations (critical algorithms)
-- **🔧 Integration Tests**: API error handling and data transformation
-- **💨 Smoke Tests**: Component rendering and basic interactions
-- **📊 Performance Tests**: Real-time update efficiency
+- **🔧 Integration Tests**: API error handling and data transformation with MSW
+- **💨 Component Tests**: React component behavior and user interactions
+- **🌐 API Route Tests**: Next.js API route testing with mock data
+- **📊 Performance Tests**: Real-time update efficiency and memory usage
+
+**Current Test Stats**: 186 tests across 16 test files, covering critical paths and edge cases.
 
 ```bash
-npm run test:watch    # Development testing
-npm run test:ci       # Full coverage report
+yarn test:watch      # Development testing with watch mode
+yarn test:ci         # Full coverage report for CI/CD
+yarn test:verbose    # Detailed test output for debugging
 ```
 
 ## 📁 Project Architecture
 
 ```
 src/
-├── app/                    # Next.js App Router pages
+├── app/                    # Next.js App Router pages and API routes
+│   ├── api/               # Server-side API endpoints
+│   │   ├── photos/        # Mars rover photo endpoints
+│   │   └── weather/       # Weather data endpoints
 ├── features/               # Domain-specific modules
-│   └── mars-time/         # Time calculations and components
+│   ├── mars-time/         # Time calculations and real-time clock
+│   ├── weather/           # Weather dashboard and data services
+│   └── photos/           # Photo galleries and camera data
+├── components/            # Reusable UI components
 ├── lib/                   # Shared utilities and constants
 ├── types/                 # TypeScript type definitions
-└── __tests__/            # Comprehensive test suite
+└── __tests__/            # Comprehensive test suite (16 files, 186 tests)
 ```
 
 ### Key Design Decisions
 
-- **Feature-Sliced Architecture**: Modular, scalable code organization
-- **Server/Client Split**: Optimal performance with Next.js patterns
-- **Pure Functions**: All time calculations are testable and predictable
-- **Progressive Enhancement**: Works without JavaScript, enhanced with it
+- **Feature-Sliced Architecture**: Modular, scalable code organization by domain
+- **Server/Client Split**: Optimal performance with Next.js App Router patterns
+- **Pure Functions**: All time calculations and data transformations are testable
+- **API Resilience**: Multi-layered fallback strategies for NASA API reliability
+- **Type Safety**: Comprehensive TypeScript coverage with strict configuration
+- **Performance First**: ISR, caching, and optimized bundle splitting
 
 ## 🌟 Portfolio Highlights
 
 ### Technical Excellence
+
+- **Production-Ready Architecture**: Multi-service API integration with resilient error handling
 - **Type Safety**: Strict TypeScript configuration with comprehensive interfaces
-- **Performance**: Sub-3s load times with optimized bundle size
+- **Testing Excellence**: 186 tests with MSW for realistic API mocking
+- **Performance**: Optimized builds, ISR, and sub-3s load times
 - **Accessibility**: WCAG 2.1 AA compliance with full keyboard navigation
-- **Error Handling**: Graceful degradation at every level
+- **Error Monitoring**: Sentry integration for production error tracking
 
 ### Code Quality Indicators
-- Zero ESLint errors with strict configuration
-- Consistent code formatting with Prettier
-- Git hooks for automated quality checks
-- Comprehensive documentation and comments
+
+- Zero ESLint errors with strict configuration and custom rules
+- Automated quality gates with Husky, lint-staged, and commitlint
+- Comprehensive CI/CD pipeline with GitHub Actions and Lighthouse CI
+- Professional documentation and inline code comments
+- Real-time monitoring and performance tracking
 
 ## 🔮 Future Enhancements
 
-- **NASA API Integration**: Real weather data from multiple sources
-- **Historical Analysis**: Long-term weather pattern visualization  
+- **Enhanced Data Export**: CSV/JSON download for weather history and photos
+- **Advanced Analytics**: Machine learning insights on weather patterns
+- **3D Visualization**: Interactive Mars globe with rover positions and trajectories
 - **Mobile App**: React Native version for iOS/Android
-- **3D Visualization**: Interactive Mars globe with rover positions
-- **Offline Support**: PWA capabilities for unreliable connections
+- **Offline Support**: PWA capabilities with service worker caching
+- **Real-time Notifications**: Weather alerts and mission updates
 
 ## 👨‍💻 Author
 
 **Jim McQuillan**
+
 - 🌐 GitHub: [@jimmcq](https://github.com/jimmcq)
 - 💼 LinkedIn: [jimmcquillan](https://linkedin.com/in/jimmcquillan/)
 
