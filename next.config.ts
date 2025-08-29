@@ -75,7 +75,7 @@ const sentryOptions = {
   }),
 };
 
-// Export with Sentry configuration if auth token is provided
-export default process.env.SENTRY_AUTH_TOKEN
+// Export with Sentry configuration if DSN is provided (auth token only needed for uploads)
+export default process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.SENTRY_DSN
   ? withSentryConfig(nextConfig, sentryOptions)
   : nextConfig;

@@ -79,11 +79,8 @@ export class ErrorBoundary extends Component<
     console.error('Error Boundary caught an error:', error, errorInfo);
 
     // Report to error monitoring service (e.g., Sentry)
-    if (
-      typeof window !== 'undefined' &&
-      process.env.NODE_ENV === 'production'
-    ) {
-      // In production, you would integrate with your error monitoring service
+    if (typeof window !== 'undefined') {
+      // Report errors to Sentry in both development and production
       this.reportError(error, errorInfo);
     }
   }
@@ -109,17 +106,17 @@ export class ErrorBoundary extends Component<
       scope.setContext('errorInfo', {
         componentStack: errorInfo.componentStack,
       });
-      
+
       // Add error boundary context
       scope.setTag('errorBoundary', 'ReactErrorBoundary');
       scope.setLevel('error');
-      
+
       // Add user context if available
       scope.setContext('component', {
         name: this.constructor.name,
         props: Object.keys(this.props),
       });
-      
+
       // Capture the exception
       Sentry.captureException(error);
     });
