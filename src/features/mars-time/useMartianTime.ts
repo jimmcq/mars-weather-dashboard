@@ -38,7 +38,7 @@ export function useMartianTime(
         setMarsTime(timeData);
       } catch (error) {
         console.error('Error calculating Mars time:', error);
-        
+
         // Report to Sentry
         Sentry.withScope((scope) => {
           scope.setTag('hook', 'useMartianTime');
@@ -49,7 +49,7 @@ export function useMartianTime(
           scope.setLevel('error');
           Sentry.captureException(error as Error);
         });
-        
+
         // Keep the previous time data on error
       }
     };
@@ -62,7 +62,7 @@ export function useMartianTime(
 
     // Cleanup on unmount
     return (): void => clearInterval(interval);
-  }, [updateInterval, includePrecision, options]);
+  }, [updateInterval, includePrecision]);
 
   return marsTime;
 }
