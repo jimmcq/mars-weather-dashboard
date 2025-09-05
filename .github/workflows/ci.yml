@@ -68,3 +68,20 @@ jobs:
         uses: treosh/lighthouse-ci-action@v10
         with:
           configPath: './lighthouserc.json'
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [test, lighthouse]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
