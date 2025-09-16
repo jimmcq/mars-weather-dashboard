@@ -3,6 +3,7 @@
 import { MartianClock } from '@/features/mars-time';
 import { WeatherDashboard, HistoricalTrends } from '@/features/weather';
 import { LatestImages } from '@/features/photos';
+import { RoverMaps } from '@/features/rover-maps';
 
 export default function HomePage(): React.ReactElement {
   return (
@@ -26,17 +27,20 @@ export default function HomePage(): React.ReactElement {
 
         {/* Main content grid */}
         <div className="grid gap-8 lg:grid-cols-3">
-          {/* Mars Clock - Featured */}
-          <div className="lg:col-span-1">
+          {/* Left column - Mars Clock */}
+          <div className="space-y-8 lg:col-span-1">
             <section aria-label="Real-time Martian clock">
               <MartianClock />
             </section>
           </div>
 
-          {/* Weather Dashboard - Now Live! */}
-          <div className="lg:col-span-2">
+          {/* Right column - Weather Dashboard + Rover Maps */}
+          <div className="space-y-8 lg:col-span-2">
             <section aria-label="Mars weather data">
               <WeatherDashboard />
+            </section>
+            <section aria-label="Rover location maps">
+              <RoverMaps />
             </section>
           </div>
         </div>
