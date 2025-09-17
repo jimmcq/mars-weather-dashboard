@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import HomePage from '@/app/page';
 
@@ -93,6 +93,15 @@ jest.mock('@/features/weather/HistoricalTrends', () => ({
       Historical Trends for {initialRover}
     </div>
   ),
+}));
+
+// Mock TermTooltip to render children without tooltip functionality
+jest.mock('@/components/TermTooltip', () => ({
+  TermTooltip: ({
+    children,
+  }: {
+    children: React.ReactNode;
+  }): React.ReactElement => <>{children}</>,
 }));
 
 import { PhotosService } from '@/features/photos/photos-service';
@@ -339,7 +348,9 @@ describe('Complete Application Workflow Integration', () => {
     });
 
     // Simulate real-time Mars time updates
-    jest.advanceTimersByTime(3000); // 3 seconds
+    act(() => {
+      jest.advanceTimersByTime(3000); // 3 seconds
+    });
 
     // Mars time should continue updating (through the useMartianTime hook)
     // The exact time will depend on the mock implementation, but it should still be present
@@ -458,7 +469,9 @@ describe('Complete Application Workflow Integration', () => {
     expect(marsTimeElement).toBeInTheDocument();
 
     // Simulate passage of time
-    jest.advanceTimersByTime(100);
+    act(() => {
+      jest.advanceTimersByTime(100);
+    });
 
     // Content should still be accessible
     expect(screen.getByText('Martian Time')).toBeInTheDocument();
