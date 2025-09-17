@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useWeatherData } from './useWeatherData';
 import { RoverName, MarsWeatherData } from '@/types/weather';
+import { TermTooltip } from '@/components/TermTooltip';
 
 /** Component props */
 export interface WeatherDashboardProps {
@@ -156,7 +157,9 @@ export function WeatherDashboard({
         >
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-400">Sol {latest.sol}</p>
+              <p className="text-sm text-slate-400">
+                <TermTooltip term="Sol">Sol</TermTooltip> {latest.sol}
+              </p>
               <p className="font-medium text-white">{latest.earthDate}</p>
             </div>
             <div className="text-right">
@@ -164,7 +167,10 @@ export function WeatherDashboard({
                 {latest.location.locationName}
               </p>
               <p className="text-xs text-slate-500">
-                {latest.instrument} instrument
+                <TermTooltip term={latest.instrument}>
+                  {latest.instrument}
+                </TermTooltip>{' '}
+                instrument
               </p>
             </div>
           </div>
@@ -198,11 +204,14 @@ export function WeatherDashboard({
           <div className="rounded-lg bg-slate-700/50 p-4">
             <div className="mb-2 flex items-center gap-2">
               <Gauge className="h-4 w-4 text-blue-400" />
-              <span className="text-sm text-slate-300">Pressure</span>
+              <span className="text-sm text-slate-300">
+                <TermTooltip term="Atmospheric Pressure">Pressure</TermTooltip>
+              </span>
             </div>
             <div className="space-y-1">
               <p className="font-mono text-lg text-white">
-                {(latest.atmosphere.pressure / 100).toFixed(1)} hPa
+                {(latest.atmosphere.pressure / 100).toFixed(1)}{' '}
+                <TermTooltip term="hPa">hPa</TermTooltip>
               </p>
               <p className="text-xs text-slate-400">
                 {latest.atmosphere.quality} data
@@ -253,7 +262,10 @@ export function WeatherDashboard({
                       : 'bg-red-500'
                 }`}
               ></div>
-              <span>Data quality: {latest.dataQuality}</span>
+              <span>
+                <TermTooltip term="Data Quality">Data quality</TermTooltip>:{' '}
+                {latest.dataQuality}
+              </span>
             </div>
             <div>
               Last updated:{' '}
@@ -271,7 +283,8 @@ export function WeatherDashboard({
             className="text-center"
           >
             <p className="text-sm text-slate-400">
-              Historical data: {data.history.length} sols available
+              Historical data: {data.history.length}{' '}
+              <TermTooltip term="sol">sols</TermTooltip> available
             </p>
           </motion.div>
         )}

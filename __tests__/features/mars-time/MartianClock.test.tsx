@@ -23,6 +23,15 @@ jest.mock('framer-motion', () => ({
   },
 }));
 
+// Mock TermTooltip to render children without tooltip functionality
+jest.mock('@/components/TermTooltip', () => ({
+  TermTooltip: ({
+    children,
+  }: {
+    children: React.ReactNode;
+  }): React.ReactElement => <>{children}</>,
+}));
+
 import { useMartianTime } from '@/features/mars-time/useMartianTime';
 
 const mockUseMartianTime = useMartianTime as jest.MockedFunction<

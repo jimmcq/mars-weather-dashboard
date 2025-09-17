@@ -17,6 +17,23 @@ jest.mock('@/features/photos/useCameraData');
 import { useCameraData } from '@/features/photos/useCameraData';
 const mockUseCameraData = jest.mocked(useCameraData);
 
+// Mock Next.js Image component to avoid hostname configuration issues in tests
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: ({
+    src,
+    alt,
+    ...props
+  }: {
+    src: string;
+    alt: string;
+    [key: string]: unknown;
+  }): React.ReactElement => {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src} alt={alt} {...props} />;
+  },
+}));
+
 // Mock framer-motion to avoid animation issues in tests
 jest.mock('framer-motion', () => ({
   motion: {
@@ -30,6 +47,7 @@ jest.mock('framer-motion', () => ({
       children,
       ...props
     }: React.ComponentProps<'img'>): React.ReactElement => (
+      // eslint-disable-next-line @next/next/no-img-element
       <img alt="test" {...props}>
         {children}
       </img>

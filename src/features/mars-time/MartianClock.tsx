@@ -8,6 +8,7 @@
 import { useMartianTime } from './useMartianTime';
 import { Clock, MapPin, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { TermTooltip } from '@/components/TermTooltip';
 
 /**
  * Real-time Martian Clock component displaying current Mars time for both rover locations
@@ -61,12 +62,17 @@ export function MartianClock(): React.ReactElement {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
         >
-          <p className="mb-1 text-sm text-slate-400">Coordinated Mars Time</p>
+          <p className="mb-1 text-sm text-slate-400">
+            <TermTooltip term="Coordinated Mars Time">
+              Coordinated Mars Time
+            </TermTooltip>
+          </p>
           <p className="font-mono text-2xl text-white" aria-live="polite">
             {marsTime.mtc}
           </p>
           <p className="mt-1 text-xs text-slate-500">
-            Mars Sol Date: {marsTime.msd.toFixed(2)}
+            <TermTooltip term="Mars Sol Date">Mars Sol Date</TermTooltip>:{' '}
+            {marsTime.msd.toFixed(2)}
           </p>
         </motion.div>
 
@@ -89,7 +95,8 @@ export function MartianClock(): React.ReactElement {
           <div className="flex items-center gap-2 text-xs text-slate-400">
             <Calendar className="h-3 w-3" />
             <span aria-live="polite">
-              Sol {marsTime.curiositySol.toLocaleString()}
+              <TermTooltip term="Sol">Sol</TermTooltip>{' '}
+              {marsTime.curiositySol.toLocaleString()}
             </span>
           </div>
         </motion.div>
@@ -113,7 +120,8 @@ export function MartianClock(): React.ReactElement {
           <div className="flex items-center gap-2 text-xs text-slate-400">
             <Calendar className="h-3 w-3" />
             <span aria-live="polite">
-              Sol {marsTime.perseveranceSol.toLocaleString()}
+              <TermTooltip term="Sol">Sol</TermTooltip>{' '}
+              {marsTime.perseveranceSol.toLocaleString()}
             </span>
           </div>
         </motion.div>
@@ -125,7 +133,9 @@ export function MartianClock(): React.ReactElement {
           transition={{ delay: 0.4 }}
           className="border-t border-slate-700 pt-4"
         >
-          <p className="mb-1 text-xs text-slate-500">Earth UTC Reference</p>
+          <p className="mb-1 text-xs text-slate-500">
+            Earth <TermTooltip term="UTC">UTC</TermTooltip> Reference
+          </p>
           <p className="font-mono text-sm text-slate-400">
             {marsTime.earthTime}
           </p>
