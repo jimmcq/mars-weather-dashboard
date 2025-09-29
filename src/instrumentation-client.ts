@@ -1,11 +1,15 @@
 /**
- * Sentry client-side configuration
+ * Client-side instrumentation file
  * This file configures error monitoring and performance tracking for the browser
+ * @see https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client
  */
 
 import * as Sentry from '@sentry/nextjs';
 
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.SENTRY_DSN;
+
+// Export router transition hook for navigation instrumentation
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
 
 if (SENTRY_DSN) {
   Sentry.init({
