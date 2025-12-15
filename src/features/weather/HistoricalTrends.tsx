@@ -510,7 +510,7 @@ export function HistoricalTrends({
                   <Line
                     type="monotone"
                     dataKey="min"
-                    stroke={metricConfig.colors.min}
+                    stroke={metricConfig.colors.min || '#3b82f6'}
                     strokeWidth={2}
                     dot={{ r: 4 }}
                     name="Min Temp"
@@ -518,7 +518,7 @@ export function HistoricalTrends({
                   <Line
                     type="monotone"
                     dataKey="avg"
-                    stroke={metricConfig.colors.avg}
+                    stroke={metricConfig.colors.avg || '#f59e0b'}
                     strokeWidth={2}
                     dot={{ r: 4 }}
                     name="Avg Temp"
@@ -526,7 +526,7 @@ export function HistoricalTrends({
                   <Line
                     type="monotone"
                     dataKey="max"
-                    stroke={metricConfig.colors.max}
+                    stroke={metricConfig.colors.max || '#ef4444'}
                     strokeWidth={2}
                     dot={{ r: 4 }}
                     name="Max Temp"
@@ -538,7 +538,7 @@ export function HistoricalTrends({
                 <Line
                   type="monotone"
                   dataKey="pressure"
-                  stroke={metricConfig.colors.pressure}
+                  stroke={metricConfig.colors.pressure || '#8b5cf6'}
                   strokeWidth={2}
                   dot={{ r: 4 }}
                   name="Pressure"
@@ -549,7 +549,7 @@ export function HistoricalTrends({
                 <Line
                   type="monotone"
                   dataKey="speed"
-                  stroke={metricConfig.colors.speed}
+                  stroke={metricConfig.colors.speed || '#10b981'}
                   strokeWidth={2}
                   dot={{ r: 4 }}
                   name="Wind Speed"
