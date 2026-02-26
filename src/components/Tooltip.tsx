@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -36,6 +36,9 @@ export function Tooltip({
 }: TooltipProps): React.ReactElement {
   const [isVisible, setIsVisible] = useState(false);
   const [actualPosition, setActualPosition] = useState(position);
+  const [tooltipStyle, setTooltipStyle] = useState<
+    Record<string, number | string>
+  >({});
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const triggerRef = useRef<HTMLSpanElement>(null);
 
@@ -93,6 +96,9 @@ export function Tooltip({
         }
 
         setActualPosition(newPosition);
+        setTooltipStyle(computeTooltipPosition(newPosition));
+      } else {
+        setTooltipStyle(computeTooltipPosition(position));
       }
 
       setIsVisible(true);
@@ -110,51 +116,54 @@ export function Tooltip({
     return 'z-50 min-w-64 max-w-sm rounded-lg border border-slate-600 bg-slate-800/95 px-4 py-3 text-sm text-slate-200 shadow-lg backdrop-blur-sm';
   };
 
-  const getTooltipPosition = (): Record<string, number | string> => {
-    if (!triggerRef.current) return {};
+  const computeTooltipPosition = useCallback(
+    (resolvedPosition: string): Record<string, number | string> => {
+      if (!triggerRef.current) return {};
 
-    const rect = triggerRef.current.getBoundingClientRect();
-    const tooltipWidth = 320;
-    const tooltipHeight = 60; // estimated
-    const margin = 8;
+      const rect = triggerRef.current.getBoundingClientRect();
+      const tooltipWidth = 320;
+      const tooltipHeight = 60; // estimated
+      const margin = 8;
 
-    let left = 0;
-    let top = 0;
+      let left = 0;
+      let top = 0;
 
-    switch (actualPosition) {
-      case 'top':
-        top = rect.top - tooltipHeight - margin;
-        left = rect.left + rect.width / 2 - tooltipWidth / 2;
-        break;
-      case 'bottom':
-        top = rect.bottom + margin;
-        left = rect.left + rect.width / 2 - tooltipWidth / 2;
-        break;
-      case 'left':
-        top = rect.top + rect.height / 2 - tooltipHeight / 2;
-        left = rect.left - tooltipWidth - margin;
-        break;
-      case 'right':
-        top = rect.top + rect.height / 2 - tooltipHeight / 2;
-        left = rect.right + margin;
-        break;
-    }
+      switch (resolvedPosition) {
+        case 'top':
+          top = rect.top - tooltipHeight - margin;
+          left = rect.left + rect.width / 2 - tooltipWidth / 2;
+          break;
+        case 'bottom':
+          top = rect.bottom + margin;
+          left = rect.left + rect.width / 2 - tooltipWidth / 2;
+          break;
+        case 'left':
+          top = rect.top + rect.height / 2 - tooltipHeight / 2;
+          left = rect.left - tooltipWidth - margin;
+          break;
+        case 'right':
+          top = rect.top + rect.height / 2 - tooltipHeight / 2;
+          left = rect.right + margin;
+          break;
+      }
 
-    // Clamp to viewport bounds
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
+      // Clamp to viewport bounds
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
 
-    left = Math.max(
-      margin,
-      Math.min(left, viewportWidth - tooltipWidth - margin)
-    );
-    top = Math.max(
-      margin,
-      Math.min(top, viewportHeight - tooltipHeight - margin)
-    );
+      left = Math.max(
+        margin,
+        Math.min(left, viewportWidth - tooltipWidth - margin)
+      );
+      top = Math.max(
+        margin,
+        Math.min(top, viewportHeight - tooltipHeight - margin)
+      );
 
-    return { left, top };
-  };
+      return { left, top };
+    },
+    []
+  );
 
   const getArrowClasses = (): string => {
     const baseClasses =
@@ -199,7 +208,7 @@ export function Tooltip({
                 aria-hidden={!isVisible}
                 style={{
                   position: 'fixed',
-                  ...getTooltipPosition(),
+                  ...tooltipStyle,
                 }}
               >
                 {content}

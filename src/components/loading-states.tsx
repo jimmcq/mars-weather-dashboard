@@ -5,6 +5,7 @@
 
 'use client';
 
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2, Satellite, Clock } from 'lucide-react';
 import React from 'react';
@@ -129,7 +130,11 @@ export function WeatherCardSkeleton(): React.ReactElement {
  * Chart skeleton loader
  * @returns Chart skeleton JSX
  */
+const CHART_BAR_HEIGHTS = [65, 42, 78, 55, 90, 38, 72];
+
 export function ChartSkeleton(): React.ReactElement {
+  const barHeights = useMemo(() => CHART_BAR_HEIGHTS, []);
+
   return (
     <div className="animate-pulse rounded-lg border border-slate-700 bg-slate-800/50 p-6">
       {/* Chart header */}
@@ -143,11 +148,11 @@ export function ChartSkeleton(): React.ReactElement {
         {/* Simulated chart lines */}
         <div className="absolute top-8 right-8 bottom-8 left-8">
           <div className="flex h-full items-end justify-between">
-            {[...Array(7)].map((_, i) => (
+            {barHeights.map((height, i) => (
               <div
                 key={i}
                 className="w-2 bg-slate-600"
-                style={{ height: `${Math.random() * 80 + 20}%` }}
+                style={{ height: `${height}%` }}
               ></div>
             ))}
           </div>

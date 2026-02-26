@@ -48,6 +48,35 @@ export interface HistoricalTrendsProps {
   className?: string;
 }
 
+/** Custom tooltip component for recharts */
+function CustomTooltip({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean;
+  payload?: Array<{
+    name: string;
+    value: number;
+    color: string;
+    payload: Record<string, unknown>;
+  }>;
+  label?: string;
+}): React.ReactElement | null {
+  if (!active || !payload || !payload.length) return null;
+
+  return (
+    <div className="rounded-lg border border-slate-600 bg-slate-800/95 p-3 shadow-lg backdrop-blur">
+      <p className="mb-2 font-semibold text-white">{label}</p>
+      {payload.map((entry, index: number) => (
+        <p key={index} className="text-sm" style={{ color: entry.color }}>
+          {`${entry.name}: ${entry.value}${entry.payload?.unit || ''}`}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 /**
  * Historical Trends Component
  * Shows interactive weather trend charts
@@ -83,7 +112,7 @@ export function HistoricalTrends({
       default:
         return sortedData;
     }
-  }, [data?.history, timeRange]);
+  }, [data, timeRange]);
 
   // Prepare chart data based on selected metric
   const chartData = useMemo(() => {
@@ -161,35 +190,6 @@ export function HistoricalTrends({
   };
 
   const metricConfig = getMetricConfig(selectedMetric);
-
-  // Custom tooltip component
-  const CustomTooltip = ({
-    active,
-    payload,
-    label,
-  }: {
-    active?: boolean;
-    payload?: Array<{
-      name: string;
-      value: number;
-      color: string;
-      payload: Record<string, unknown>;
-    }>;
-    label?: string;
-  }): React.ReactElement | null => {
-    if (!active || !payload || !payload.length) return null;
-
-    return (
-      <div className="rounded-lg border border-slate-600 bg-slate-800/95 p-3 shadow-lg backdrop-blur">
-        <p className="mb-2 font-semibold text-white">{label}</p>
-        {payload.map((entry, index: number) => (
-          <p key={index} className="text-sm" style={{ color: entry.color }}>
-            {`${entry.name}: ${entry.value}${entry.payload?.unit || ''}`}
-          </p>
-        ))}
-      </div>
-    );
-  };
 
   // Loading state
   if (isLoading) {
